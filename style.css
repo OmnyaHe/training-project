@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Lama Sans", sans-serif;
+  background: linear-gradient(135deg, #0f1c26, #3e2d2c);
+  color: #BEAD9D;
+  direction: rtl;
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse; /* يجعل الشعار يسارًا والرابط يمينًا */
+  padding: 20px 40px;
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  font-size: 14px;
+  margin-right: 120px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #BEAD9D;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #e4e3dc;
+}
+
+.main-content {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.main-content p {
+  font-size: 22px;
+  margin-bottom: 30px;
+  right: 180px;
+}
+
+.main-content-inner {
+  position: absolute;
+  top: 30%;
+  right: 160px; 
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 20px;
+  max-width: 400px;
+   width: fit-content;
+}
+
+.search-btn {
+  background-color:#BEAD9D;
+  border: 1px solid #aaa;
+  border-radius: 30px;
+  padding: 10px 24px;
+  color: #f8f0e8;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: inherit;
+  transition: 0.3s;
+  margin-right: 0;
+  align-self: flex-start;
+}
+
+.search-btn:hover {
+  background-color: #f8f0e8;
+  color: #000;
+}
+
+img.logo {
+  height: 55px;
+}
