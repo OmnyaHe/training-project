@@ -83,3 +83,78 @@ header {
 img.logo {
   height: 55px;
 }
+
+/* Style for the filter page */
+
+body.filter-body {
+  margin: 0;
+  font-family: 'Lama Sans', sans-serif;
+  background: linear-gradient(to left, #D1B8A3, #F0EDE9);
+  color: #293242;
+  direction: rtl;
+}
+
+body.filter-body * {
+  text-align: right;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  position: relative;
+  background: linear-gradient(to left, #F0EDE9, #D1B8A3);
+}
+
+.filter-icon {
+  font-size: 2rem;
+  color: #BEAD9D;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.filter-form {
+  background-color: rgba(92, 74, 62, 0.5);
+  padding: 2.5rem;
+  border-radius: 2.5rem;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.filter-form label {
+  font-weight: bold;
+  color: #293242;
+}
+
+.filter-form input,
+.filter-form select {
+  padding: 0.9rem 1.2rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: #5C4A3E;
+  color: #EEEFEF;
+  font-family: 'Lama Sans', sans-serif;
+  font-size: 1rem;
+}
+
+.filter-form button {
+  padding: 0.7rem 2.5rem;
+  background-color: #323050;
+  color: #EEEFEF;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  align-self: center;
+}
