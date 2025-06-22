@@ -144,7 +144,7 @@ header {
   text-align: right;
   gap: 20px;
   max-width: 400px;
-   width: fit-content;
+  width: fit-content;
 }
 
 .search-btn {
