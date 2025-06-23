@@ -18,7 +18,7 @@ d3.json("https://raw.githubusercontent.com/OmnyaHe/geo/main/hijaz-map.geojson").
 
     const path = d3.geoPath().projection(projection);
 
-    // إصلاح الاتجاه لو لازم
+   
     geojson.features.forEach(function (feature) {
         if (feature.geometry.type == "MultiPolygon") {
             feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => ring.reverse()));
@@ -27,17 +27,17 @@ d3.json("https://raw.githubusercontent.com/OmnyaHe/geo/main/hijaz-map.geojson").
         }
     });
 
-    // التحديد بالمناطق المطلوبة فقط
+ 
     const targetRegions = ["منطقة مكة المكرمة", "منطقة المدينة المنورة", "منطقة تبوك", "منطقة الباحة"]
     const filteredFeatures = geojson.features.filter(f => targetRegions.includes(f.properties.name));
 
-    // الألوان
+    
     function getColor(name) {
         switch (name) {
-            case "منطقة تبوك": return "#2196f3";
-            case "منطقة الباحة": return "#4caf50";
-            case "منطقة المدينة المنوره ": return "#ff9800";
-            case "منطقة مكة المكرمة": return "#9c27b0";
+    case "منطقة مكة المكرمة": return "#1A6566";   
+    case "منطقة المدينة المنورة": return "#21445B"; 
+    case "منطقة تبوك": return "#BEAD9D";            
+    case "منطقة الباحة": return "#737476";
             default: return "#ccc";
         }
     }
@@ -53,7 +53,7 @@ d3.json("https://raw.githubusercontent.com/OmnyaHe/geo/main/hijaz-map.geojson").
         .style("pointer-events", "none")
         .style("visibility", "hidden");
 
-    // رسم المناطق
+   
     svg.selectAll(".region")
         .data(filteredFeatures)
         .enter()
@@ -77,7 +77,7 @@ d3.json("https://raw.githubusercontent.com/OmnyaHe/geo/main/hijaz-map.geojson").
             tooltip.style("visibility", "hidden");
         });
 
-    // إضافة أسماء المناطق على الخريطة
+ 
     svg.selectAll("text")
         .data(filteredFeatures)
         .enter()
