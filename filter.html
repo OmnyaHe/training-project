@@ -6,7 +6,7 @@
     <title>Filter</title>
 
     <!-- Link to CSS stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 
     <!-- Font Awesome Library -->
     <link
@@ -21,10 +21,11 @@
   <body class="filter-body">
     <div class="filter-container">
 
-      <!-- Filter icon -->
-      <i class="fas fa-sliders filter-icon"></i>
+      <!-- Filter icon with ID to toggle the form -->
+      <i id="toggleFilter" class="fas fa-sliders filter-icon"></i>
 
-      <form class="filter-form">
+      <!-- Filter form, initially hidden using the "hidden" class -->
+      <form class="filter-form hidden">
         <label for="title">عنوان الشعر</label>
         <input type="text" id="title" name="title" />
 
@@ -46,6 +47,24 @@
         <button type="submit">بحث</button>
       </form>
     </div>
+
+    <!-- Script to toggle form visibility when the filter icon is clicked -->
+    <script>
+      const toggleBtn = document.getElementById("toggleFilter");
+      const filterForm = document.querySelector(".filter-form");
+
+      toggleBtn.addEventListener("click", () => {
+        filterForm.classList.toggle("hidden");
+      });
+    </script>
+
+    <!-- CSS style to hide elements using the "hidden" class -->
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
   </body>
 </html>
+
 
