@@ -409,7 +409,7 @@ body.filter-body * {
 
 .close-button:hover,
 .close-button:focus {
-    color: #ccc;
+    color: black;
     text-decoration: none;
     cursor: pointer;
 }
@@ -422,7 +422,7 @@ body.filter-body * {
 #contactModal .form-field input[type="email"],
 #contactModal .form-field textarea {
     background-color: var(--color-contact-input);
-    color: var(--color-text-dark);
+    color: var(--color-text-light);
 }
 
 #contactModal .btn {
