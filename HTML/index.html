@@ -1,98 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>الخريطة الشعرية</title>
-    <link rel="stylesheet" href="/CSS/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الخريطة الشعرية</title>
+  <link rel="stylesheet" href="/CSS/style.css">
     <script src="/JS/script.js" defer></script>
-    <script src="/GIS/GIS.js" defer></script>
-
 </head>
 <body>
-    <header>
-        <img src="/pictures/logo.png" alt="Logo" class="logo" />
-        <div class="nav-links">
-        <a href="#">الصفحة الرئيسية</a>
-        <a href="#map-section"> ابدأ البحث</a> 
-        <div class="dropdown">
-            <a href="#" class="dropbtn" id="contactDropdownBtn">تواصل معنا <span class="dropdown-arrow"></span></a>
-            <div class="dropdown-content" id="contactDropdownContent"> 
-                <a href="#share-section" id="scroll-to-share">شاركنا</a>
-                <a href="#" id="open-contact-modal">تواصل</a>
-            </div>
-        </div>
-        </div>
-    </header>
+  <header>
+    <img src="/pictures/logo.png" alt="Logo" class="logo" />
+    <div class="nav-links">
+      <a href="#">الصفحة الرئيسية</a>
+      <a href="#"> ابدأ البحث</a>
+      <div class="dropdown">
+          <a href="#" class="dropbtn" id="contactDropdownBtn">تواصل معنا <span class="dropdown-arrow"></span></a>
+          <div class="dropdown-content" id="contactDropdownContent"> <a href="#share-section" id="scroll-to-share">شاركنا</a>
+              <a href="#" id="open-contact-modal">تواصل</a>
+          </div>
+      </div>
+    </div>
+  </header>
 
-    <section class="main-content">
-        <div class="main-content-inner">
-            <p>إذا أردت أن ترى الحجاز بقلب شاعر، <br>
-                فأهلًا بك في خريطتنا الشعرية.</p>
-            <button class="search-btn">ابدأ البحث</button>
-        </div>
-    </section>
+  <section class="main-content">
+  <div class="main-content-inner">
+    <p>إذا أردت أن ترى الحجاز بقلب شاعر، <br>
+         فأهلًا بك في خريطتنا الشعرية.</p>
+    <button class="search-btn">ابدأ البحث</button>
+  </div>
 
-    <section class="map-container" id="map-section"> 
-        <div id="map"></div>
-        <i id="openFilterBtn" class="fas fa-sliders filter-icon-main"></i>
-    </section>
-
-        
-    <section id="filterModal" class="modal">
-        <div class="filter-modal-content">
-            <span class="close-button" id="closeFilterModalBtn">&times;</span>
-            <h2 class="modal-header">تصفية البحث</h2>
-            <form class="filter-form">
-                <label for="poet">اسم الشاعر</label>
-                <select id="poet"><option value="">اختر</option></select>
-                <label for="place">اسم المكان</label>
-                <select id="place"><option value="">اختر</option></select>
-                <label for="type">نوع الشعر</label>
-                <select id="type"><option value="">اختر</option></select>
-                <label for="purpose">الغرض الشعري</label>
-                <select id="purpose"><option value="">اختر</option></select>
-                <button type="submit">بحث</button>
-            </form>
-        </div>
-    </section>
-
-
-    <section id="alertBox">
-        <p>ليس هناك نتائج مطابقة.</p>
-        <div class="alert-buttons"> 
-            <button onclick="restoreAllPins()">إظهار كل المواقع</button>
-            <button onclick="resetFilters()">إعادة تعيين البحث</button>
-        </div>
-    </section>
+   
+</section>
 
     <section class="share-container" id="share-section">
         <h2 class="share-header">شاركنا</h2>
 
-        <form action="#">
+        <form id="shareform2">
             <div class="input-group">
                 <div class="form-field">
                     <label for="name">الاسم</label>
-                    <input type="text" id="name" name="name">
+                    <input type="text" id="name" name="name" placeholder="مثال: أحمد">
                 </div>
                 <div class="form-field">
                     <label for="email">الايميل</label>
-                    <input type="email" id="email" name="email">
+                    <input type="email" id="email" name="email"placeholder="مثال: ahmed@email.com">
                 </div>
             </div>
 
             <div class="input-group">
                 <div class="form-field">
                     <label for="phone">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone">
+                    <input type="tel" id="phone" name="phone" placeholder="مثال: +9665XXXXXXXX">
                 </div>
                 <div class="form-field">
                     <label for="share-type">نوع المشاركة</label>
                     <select name="share-type" id="share-type">
-                        <option value="">اختر...</option>
+                        <option value="">اختر نوع المشاركة...</option>
                         <option value="add-poem">إضافة شعر</option>
                         <option value="edit-mistake">تعديل خطأ</option>
                     </select>
@@ -105,7 +68,7 @@
                     <input type="text" id="poetName" name="poetName">
                 </div>
                 <div class="form-field">
-                    <label for="poemTitle">عنوان الشعر</label>
+                    <label for="poemTitle">الغرض الشعري</label>
                     <input type="text" id="poemTitle" name="poemTitle">
                 </div>
                 <div class="form-field full-width">
@@ -144,37 +107,41 @@
         </form>
     </section>
 
-    <section id="contactModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2 class="modal-header">تواصل معنا</h2>
-            <form action="#">
-                <div class="input-group">
-                    <div class="form-field">
-                        <label for="contactName">الاسم</label>
-                        <input type="text" id="contactName" name="contactName">
-                    </div>
-                    <div class="form-field">
-                        <label for="contactEmail">الايميل</label>
-                        <input type="email" id="contactEmail" name="contactEmail">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="form-field full-width">
-                        <label for="contactSubject">الموضوع</label>
-                        <input type="text" id="contactSubject" name="contactSubject">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="form-field full-width">
-                        <label for="contactMessage">الرسالة</label> <textarea id="contactMessage" name="contactMessage"></textarea>
-                    </div>
-                </div>
-                <div class="btn-container">
-                    <button type="submit" class="btn">إرسال</button>
-                </div>
-            </form>
-            </div>
-    </section>
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+          <span class="close-button">&times;</span>
+          <h2 class="modal-header">تواصل معنا</h2>
+          <form action="#">
+              <div class="input-group">
+                  <div class="form-field">
+                      <label for="contactName">الاسم</label>
+                      <input type="text" id="contactName" name="contactName">
+                  </div>
+                  <div class="form-field">
+                      <label for="contactEmail">الايميل</label>
+                      <input type="email" id="contactEmail" name="contactEmail">
+                  </div>
+              </div>
+              <div class="input-group">
+                  <div class="form-field full-width">
+                      <label for="contactSubject">الموضوع</label>
+                      <input type="text" id="contactSubject" name="contactSubject">
+                  </div>
+              </div>
+              <div class="input-group">
+                  <div class="form-field full-width">
+                      <label for="contactMessage">الرسالة</label> <textarea id="contactMessage" name="contactMessage"></textarea>
+                  </div>
+              </div>
+              <div class="btn-container">
+                  <button type="submit" class="btn">إرسال</button>
+              </div>
+          </form>
+        </div>
+    </div>
+
+   
+
+    
 </body>
 </html>
