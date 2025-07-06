@@ -9,10 +9,52 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 document.getElementById("shareForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const name = document.getElementById("contactName").value;
-  const email = document.getElementById("contactEmail").value;
-  const subject = document.getElementById("contactSubject").value;
-  const message = document.getElementById("contactMessage").value;
+  const nameInput = document.getElementById("contactName");
+  const emailInput = document.getElementById("contactEmail");
+  const subjectInput = document.getElementById("contactSubject");
+  const messageInput = document.getElementById("contactMessage");
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const subject = subjectInput.value.trim();
+  const message = messageInput.value.trim();
+
+  clearError(nameInput);
+  clearError(emailInput);
+  clearError(subjectInput);
+  clearError(messageInput);
+
+  let isValid = true;
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!name) {
+    showError(nameInput, "فضلًا أدخل اسمك.");
+    isValid = false;
+  }
+
+  if (!email) {
+    showError(emailInput, "فضلًا أدخل بريدك الإلكتروني.");
+    isValid = false;
+  } else if (!emailPattern.test(email)) {
+    showError(emailInput, "الرجاء إدخال بريد إلكتروني صالح. مثال: example@email.com");
+    isValid = false;
+  }
+
+  if (!subject) {
+    showError(subjectInput, "فضلًا أدخل موضوع الرسالة.");
+    isValid = false;
+  }
+
+  if (!message) {
+    showError(messageInput, "فضلًا أدخل الرسالة.");
+    isValid = false;
+  } else if (message.length > 300) {
+    showError(messageInput, "فضلًا لا تتجاوز ٣٠٠ حرف.");
+    isValid = false;
+  }
+
+  if (!isValid) return;
 
   const { data, error } = await supabaseClient
     .from("رسائل_التواصل")
@@ -20,12 +62,50 @@ document.getElementById("shareForm").addEventListener("submit", async function (
 
   if (error) {
     console.error("❌ Error:", error);
-    alert("حدث خطأ أثناء الإرسال");
+    showError(messageInput, "حدث خطأ أثناء الإرسال.");
   } else {
     alert("تم إرسال الرسالة بنجاح!");
     e.target.reset();
+    clearAllErrors();
   }
 });
+
+// Function to display an error message below the input field
+function showError(inputElement, message) {
+  clearError(inputElement);
+
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'error-message';
+  errorDiv.innerText = message;
+  inputElement.parentNode.appendChild(errorDiv);
+}
+
+// Function to remove the error message from a specific field
+function clearError(inputElement) {
+  const parent = inputElement.parentNode;
+  const oldError = parent.querySelector('.error-message');
+  if (oldError) oldError.remove();
+}
+
+// Function to remove all error messages from the form
+function clearAllErrors() {
+  const allErrors = document.querySelectorAll(".error-message");
+  allErrors.forEach(err => err.remove());
+}
+
+// Automatically clear the error message when the user types in the input
+["contactName", "contactEmail", "contactSubject", "contactMessage"].forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener("input", () => clearError(input));
+});
+
+// Clear all errors and reset the form when closing the modal
+document.querySelector(".close-button").addEventListener("click", () => {
+  clearAllErrors();
+  document.getElementById("shareForm").reset();
+});
+
+
 
 ///////////////////////////////////////////////////////
 // ✅ نموذج "شاركنا"
