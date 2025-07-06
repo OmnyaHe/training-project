@@ -576,3 +576,17 @@ img.logo {
   background-color: var(--color-btn-hover);
 }
 
+/* Style for validation form */
+input::placeholder,
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+textarea::placeholder {
+  color: #f9f2e3;
+  font-size: 13px;
+}
+
+.error-message {
+  color: rgb(169, 21, 21);
+  font-size: 13px;
+  margin-top: 5px;
+}
