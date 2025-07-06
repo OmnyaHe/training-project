@@ -67,6 +67,13 @@ document.getElementById("shareForm").addEventListener("submit", async function (
     e.target.reset();
     clearAllErrors();
   }
+
+  // Automatically closes the contact form modal after successful submission
+  const contactFormModal = document.getElementById("contactModal");
+  if (contactFormModal) {
+    contactFormModal.style.display = "none";
+  }
+
 });
 
 // ✅ نموذج شاركنا
