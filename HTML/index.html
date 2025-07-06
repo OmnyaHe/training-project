@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الخريطة الشعرية</title>
-  <link rel="stylesheet" href="/CSS/style.css">
-    <script src="/JS/script.js" defer></script>
+  <link rel="stylesheet" href="../CSS/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../JS/script.js" defer></script>
 </head>
 <body>
   <header>
-    <img src="/pictures/logo.png" alt="Logo" class="logo" />
+    <img src="../pictures/logo.png" alt="Logo" class="logo" />
     <div class="nav-links">
       <a href="#">الصفحة الرئيسية</a>
       <a href="#"> ابدأ البحث</a>
@@ -28,14 +30,12 @@
          فأهلًا بك في خريطتنا الشعرية.</p>
     <button class="search-btn">ابدأ البحث</button>
   </div>
-
-   
 </section>
 
     <section class="share-container" id="share-section">
         <h2 class="share-header">شاركنا</h2>
 
-        <form action="#">
+        <form id="shareform2">
             <div class="input-group">
                 <div class="form-field">
                     <label for="name">الاسم</label>
@@ -111,7 +111,7 @@
       <div class="modal-content">
           <span class="close-button">&times;</span>
           <h2 class="modal-header">تواصل معنا</h2>
-          <form action="#">
+          <form  id="shareForm">
               <div class="input-group">
                   <div class="form-field">
                       <label for="contactName">الاسم</label>
@@ -142,6 +142,9 @@
 
    
 
-    
+<script src="../JS/contactForm.js"></script>
+
+
+
 </body>
 </html>
