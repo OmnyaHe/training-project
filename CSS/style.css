@@ -276,6 +276,17 @@ img.logo {
   margin-top: 5px;
 }
 
+.filter-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: left 15px center;
+  padding-right: 15px; 
+  padding-left: 50px; 
+}
+
 .filter-form input,
 .filter-form select {
   padding: 0.5rem 1.2rem;
@@ -371,20 +382,6 @@ img.logo {
 #alertBox button:hover {
   background-color: var(--color-btn-hover);
   transform: translateY(-2px);
-}
-
-#alertBox::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 30px;
-  height: 30px;
-  background-color: var(--color-contact-container);
-  border-radius: 5px;
-  z-index: -1;
-  box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
 }
 
 /* style for share section */

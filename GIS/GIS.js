@@ -251,8 +251,8 @@ function resetFilters() {
     document.querySelectorAll(".filter-form select").forEach(select => select.value = "");
     document.getElementById("alertBox").classList.remove("show");
     plotAllPins();
-    filterModal.classList.remove("show");
-    document.body.style.overflow = 'auto';
+    filterModal.classList.add("show");
+    document.body.style.overflow = 'hidden';
 }
 
 // Event listener for the search button
@@ -268,7 +268,6 @@ if (mainSearchBtn) {
 document.addEventListener('DOMContentLoaded', () => {
     fetchPoetsAndTypes();
     initSaudiMap();
-    resetFilters();
 });
 
 // Handle window resize to make map responsive
