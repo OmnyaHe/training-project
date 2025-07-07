@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="../JS/script.js" defer></script>
-    <script src="../GIS/GIS.js" defer></script>    
+    <script src="../GIS/fullGIS.js" defer></script>    
 </head>
 <body>
     <header>
@@ -46,14 +46,11 @@
             <span class="close-button" id="closeFilterModalBtn">&times;</span>
             <h2 class="modal-header">تصفية البحث</h2>
             <form class="filter-form">
-                <label for="poet">اسم الشاعر</label>
-                <select id="poet"><option value="">اختر</option></select>
-                <label for="place">اسم المكان</label>
-                <select id="place"><option value="">اختر</option></select>
-                <label for="type">نوع الشعر</label>
-                <select id="type"><option value="">اختر</option></select>
-                <label for="purpose">الغرض الشعري</label>
-                <select id="purpose"><option value="">اختر</option></select>
+            <label for="poet">اسم الشاعر</label>
+            <select id="poet"><option value="">اختر</option></select>
+
+            <label for="region">الإمارة</label>
+            <select id="region"><option value="">اختر</option></select>
                 <button type="submit">بحث</button>
             </form>
         </div>
@@ -176,5 +173,16 @@
             </div>
     </section>
 <script src="../JS/contactForm.js"></script>
+
+<!-- Modal لعرض بيانات الموقع والقصيدة -->
+<div id="infoModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <h2 id="modal-title">اسم المكان</h2>
+    <div id="modal-content">
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

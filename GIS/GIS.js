@@ -3,6 +3,8 @@ const supabase = window.supabase.createClient(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1aXloY2FjeHRiaGZmcHdsaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExOTYyNjYsImV4cCI6MjA2Njc3MjI2Nn0.N1iXFjDfeXTLUsY51puvnHC-M-T2erCaQ1OTkXnT6uY'
 );
 
+
+
 let svg, projection, tooltip, allPins = [];
 let path;
 
@@ -10,6 +12,8 @@ let path;
 const openFilterBtn = document.getElementById("openFilterBtn"); // The filter icon
 const filterModal = document.getElementById("filterModal");
 const closeFilterModalBtn = document.getElementById("closeFilterModalBtn"); // The close button inside the filter modal
+
+
 
 // Event listeners for opening and closing the filter modal
 if (openFilterBtn) {
@@ -37,21 +41,18 @@ if (filterModal) {
 }
 
 // Fetch poets, places, and poem types for filter dropdowns
-async function fetchPoetsAndTypes() {
+async function fetchPoetsAndRegions() {
     const { data: poetData, error: poetError } = await supabase.from('الشاعر').select('اسم_الشاعر');
-    const { data: placeData, error: placeError } = await supabase.from('المكان').select('اسم_المكان');
-    const { data: poemsData, error: poemsError } = await supabase.from('القصيدة').select('نوع_الشعر, الغرض_الشعري');
+    const { data: placeData, error: placeError } = await supabase.from('المكان').select('الامارة');
 
     if (poetError) console.error("Error fetching poets:", poetError.message);
-    if (placeError) console.error("Error fetching places:", placeError.message);
-    if (poemsError) console.error("Error fetching poem details:", poemsError.message);
+    if (placeError) console.error("Error fetching regions:", placeError.message);
 
     const fillSelect = (id, items) => {
         const el = document.getElementById(id);
-        // Clear existing options except the "اختر" one
         el.innerHTML = '<option value="">اختر</option>';
         if (items) { 
-            [...new Set(items.filter(Boolean))].sort().forEach(val => { 
+            [...new Set(items.filter(Boolean))].sort().forEach(val => {
                 const opt = document.createElement('option');
                 opt.value = val;
                 opt.textContent = val;
@@ -61,10 +62,17 @@ async function fetchPoetsAndTypes() {
     };
 
     fillSelect('poet', poetData?.map(p => p.اسم_الشاعر) || []);
-    fillSelect('place', placeData?.map(p => p.اسم_المكان) || []);
-    fillSelect('type', poemsData?.map(p => p.نوع_الشعر) || []);
-    fillSelect('purpose', poemsData?.map(p => p.الغرض_الشعري) || []);
+    // Clean and deduplicate regions
+    const cleanedRegions = [...new Set(
+    placeData
+        .map(p => p.الامارة ? p.الامارة.trim() : null)
+        .filter(Boolean)
+    )].sort();
+
+    fillSelect('region', cleanedRegions);
+
 }
+
 
 // Get colors for Saudi regions
 function getSaudiColors() {
@@ -200,29 +208,43 @@ async function plotAllPins(filterPlaces = []) {
 // Event listener for filter form submission
 document.querySelector('.filter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const poet = document.getElementById('poet').value;
-    const place = document.getElementById('place').value;
-    const type = document.getElementById('type').value;
-    const purpose = document.getElementById('purpose').value;
+    const poetName = document.getElementById('poet').value.trim();
+    const region = document.getElementById('region').value.trim();
 
+    let poetId = null;
+
+    // Step 1: Get الشاعر ID if poet is selected
+    if (poetName) {
+        const { data: poetResult, error: poetError } = await supabase
+            .from('الشاعر')
+            .select('معرف_الشاعر, اسم_الشاعر')
+            .ilike('اسم_الشاعر', poetName)
+            .single();  // we expect only one
+
+        if (poetError) {
+            console.error("Error fetching poet ID:", poetError.message);
+        } else {
+            poetId = poetResult?.معرف_الشاعر;
+        }
+    }
+
+    // Step 2: Build القصيدة query
     let query = supabase.from('القصيدة').select(`
-        نوع_الشعر,
-        الغرض_الشعري,
+        معرف_المكان,
+        معرف_الشاعر,
         الشاعر:معرف_الشاعر (اسم_الشاعر),
-        المكان:معرف_المكان (اسم_المكان)
+        المكان:معرف_المكان (اسم_المكان, الامارة)
     `);
 
-    if (poet) query = query.eq('الشاعر.اسم_الشاعر', poet);
-    if (place) query = query.eq('المكان.اسم_المكان', place);
-    if (type) query = query.eq('نوع_الشعر', type);
-    if (purpose) query = query.eq('الغرض_الشعري', purpose);
+    if (poetId) query = query.eq('معرف_الشاعر', poetId);
+    if (region) query = query.eq('المكان.الامارة', region);
 
     const { data, error } = await query;
 
     if (error) {
         console.error("Error filtering data:", error.message);
         document.getElementById("alertBox").classList.add("show");
-        plotAllPins([]); // Show no pins if there's an error
+        plotAllPins([]);
         return;
     }
 
@@ -239,6 +261,7 @@ document.querySelector('.filter-form').addEventListener('submit', async (e) => {
     filterModal.classList.remove("show"); 
     document.body.style.overflow = 'auto';
 });
+
 
 // Restore all pins (show all locations)
 function restoreAllPins() {
@@ -266,7 +289,7 @@ if (mainSearchBtn) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchPoetsAndTypes();
+    fetchPoetsAndRegions();
     initSaudiMap();
 });
 
