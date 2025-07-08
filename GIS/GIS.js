@@ -3,6 +3,7 @@ const supabase = window.supabase.createClient(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1aXloY2FjeHRiaGZmcHdsaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExOTYyNjYsImV4cCI6MjA2Njc3MjI2Nn0.N1iXFjDfeXTLUsY51puvnHC-M-T2erCaQ1OTkXnT6uY'
 );
 
+
 let svg, projection, tooltip, allPins = [];
 let path;
 
@@ -37,34 +38,29 @@ if (filterModal) {
 }
 
 // Fetch poets, places, and poem types for filter dropdowns
-async function fetchPoetsAndTypes() {
-    const { data: poetData, error: poetError } = await supabase.from('الشاعر').select('اسم_الشاعر');
-    const { data: placeData, error: placeError } = await supabase.from('المكان').select('اسم_المكان');
-    const { data: poemsData, error: poemsError } = await supabase.from('القصيدة').select('نوع_الشعر, الغرض_الشعري');
+async function fetchPoetsAndRegions() {
+  const { data: poetData, error: poetError } = await supabase.from('الشاعر').select('اسم_الشاعر');
+  const { data: placeData, error: placeError } = await supabase.from('المكان').select('الامارة');
 
-    if (poetError) console.error("Error fetching poets:", poetError.message);
-    if (placeError) console.error("Error fetching places:", placeError.message);
-    if (poemsError) console.error("Error fetching poem details:", poemsError.message);
+  if (poetError) console.error("Error fetching poets:", poetError.message);
+  if (placeError) console.error("Error fetching regions:", placeError.message);
 
-    const fillSelect = (id, items) => {
-        const el = document.getElementById(id);
-        // Clear existing options except the "اختر" one
-        el.innerHTML = '<option value="">اختر</option>';
-        if (items) { 
-            [...new Set(items.filter(Boolean))].sort().forEach(val => { 
-                const opt = document.createElement('option');
-                opt.value = val;
-                opt.textContent = val;
-                el.appendChild(opt);
-            });
-        }
-    };
+  const fillSelect = (id, items) => {
+    const el = document.getElementById(id);
+    el.innerHTML = '<option value="">اختر</option>';
+    [...new Set(items.filter(Boolean))].sort().forEach(val => {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = val;
+      el.appendChild(opt);
+    });
+  };
 
-    fillSelect('poet', poetData?.map(p => p.اسم_الشاعر) || []);
-    fillSelect('place', placeData?.map(p => p.اسم_المكان) || []);
-    fillSelect('type', poemsData?.map(p => p.نوع_الشعر) || []);
-    fillSelect('purpose', poemsData?.map(p => p.الغرض_الشعري) || []);
+  fillSelect('poet', poetData?.map(p => p.اسم_الشاعر) || []);
+  const cleanedRegions = [...new Set(placeData.map(p => p.الامارة ? p.الامارة.trim() : null).filter(Boolean))].sort();
+  fillSelect('region', cleanedRegions);
 }
+
 
 // Get colors for Saudi regions
 function getSaudiColors() {
@@ -155,90 +151,180 @@ async function initSaudiMap() {
     }
 }
 
-// Plot pins on the map
-async function plotAllPins(filterPlaces = []) {
-    const { data: places, error } = await supabase.from('المكان').select('اسم_المكان, lat, lon');
-    if (error) {
-        console.error("Error fetching places:", error.message);
-        return;
+
+
+async function plotAllPins(filteredPlaceIds = []) {
+  const { data: places } = await supabase.from("المكان")
+    .select("اسم_المكان, lat, lon, معرف_المكان, الامارة, المدينة");
+
+  let pinsToShow = places;
+
+  if (filteredPlaceIds.length > 0) {
+  pinsToShow = places.filter(p => filteredPlaceIds.includes(p.معرف_المكان));
+}
+
+  allPins = pinsToShow.filter(p => p.lat && p.lon);
+
+  svg.selectAll(".place-pin").remove();
+
+  svg.selectAll(".place-pin")
+    .data(allPins)
+    .enter().append("circle")
+    .attr("class", "place-pin")
+    .attr("r", 6)
+    .attr("fill", filteredPlaceIds.length > 0 ? "orange" : "crimson")
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 1.5)
+    .attr("transform", d => `translate(${projection([d.lon, d.lat])})`)
+    .on("click", async (event, d) => {
+  const { data, error } = await supabase
+    .from("القصيدة")
+    .select(`
+      النص_الشهري,
+      نوع_الشعر,
+      الغرض_الشعري,
+      العصر_الشعري,
+      الشاعر:معرف_الشاعر (اسم_الشاعر, تاريخ_ولادة_الشاعر, تاريخ_وفاة_الشاعر, صورة_الشاعر),
+      المصدر:معرف_المصدر (اسم_المصدر, اسم_المؤلف, تاريخ_النشر)
+    `)
+    .eq("معرف_المكان", d.معرف_المكان);
+
+  const { data: imagesData } = await supabase
+    .from("صورة_المكان")
+    .select("رابط_الصورة")
+    .eq("معرف_المكان", d.معرف_المكان);
+
+  const images = imagesData?.map(img => img.رابط_الصورة) || [];
+
+  if (!data || data.length === 0) {
+    openModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
+    return;
+  }
+
+  const poem = data[0];
+
+  const contentHTML = `
+    <div class="modal-details">
+      <h3>${d.اسم_المكان}</h3>
+      <p><strong>الإمارة:</strong> ${d.الامارة}</p>
+      <p><strong>المدينة:</strong> ${d.المدينة}</p>
+      <hr />
+      <p><strong>النص:</strong> ${poem.النص_الشهري}</p>
+      <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
+      <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
+      <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
+      <p><strong>الشاعر:</strong> ${poem.الشاعر?.اسم_الشاعر}</p>
+      <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
+      <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
+      <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
+      <div class="image-slider">
+  <button id="prevImage">←</button>
+  <img id="slider-image" src="${images[0] || ''}" alt="صورة للموقع" />
+  <button id="nextImage">→</button>
+</div>
+
+  `;
+
+  openModal("تفاصيل الشعر", contentHTML);
+
+  // تفعيل أزرار التنقل بين الصور
+  setTimeout(() => {
+    let currentImageIndex = 0;
+    const sliderImg = document.getElementById('slider-image');
+    const prevBtn = document.getElementById('prevImage');
+    const nextBtn = document.getElementById('nextImage');
+
+    function showImage(index) {
+      if (sliderImg && images.length > 0) {
+        sliderImg.src = images[index];
+      }
     }
 
-    // Remove existing pins before plotting new ones
-    svg.selectAll(".place-pin").remove();
+    if (prevBtn && nextBtn) {
+      prevBtn.onclick = () => {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        showImage(currentImageIndex);
+      };
 
-    const toPlot = filterPlaces.length > 0 ? places.filter(p => filterPlaces.includes(p.اسم_المكان)) : places;
-    allPins = toPlot.filter(p => p.lat && p.lon); // Ensure lat/lon exist
+      nextBtn.onclick = () => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        showImage(currentImageIndex);
+      };
+    }
+  }, 100);
+});
 
-    svg.selectAll(".place-pin")
-        .data(allPins)
-        .enter().append("circle")
-        .attr("class", "place-pin")
-        .attr("r", 6)
-        .attr("fill", filterPlaces.length > 0 ? "orange" : "crimson")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .attr("transform", d => {
-            // Ensure projection is ready before transforming coordinates
-            if (projection && d.lon && d.lat) {
-                const coords = projection([d.lon, d.lat]);
-                // Check if coords are valid numbers (projection might return null/NaN for invalid input)
-                if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
-                    return `translate(${coords})`;
-                }
-            }
-            return `translate(0,0)`; // Fallback if projection fails
-        })
-        .on("mouseover", (event, d) => {
-            tooltip.style("visibility", "visible")
-                .html(`<strong>${d.اسم_المكان}</strong>`)
-                .style("left", event.pageX + 15 + "px")
-                .style("top", event.pageY - 20 + "px");
-        })
-        .on("mouseout", () => tooltip.style("visibility", "hidden"));
 }
 
 // Event listener for filter form submission
 document.querySelector('.filter-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const poet = document.getElementById('poet').value;
-    const place = document.getElementById('place').value;
-    const type = document.getElementById('type').value;
-    const purpose = document.getElementById('purpose').value;
+  e.preventDefault();
 
-    let query = supabase.from('القصيدة').select(`
-        نوع_الشعر,
-        الغرض_الشعري,
-        الشاعر:معرف_الشاعر (اسم_الشاعر),
-        المكان:معرف_المكان (اسم_المكان)
-    `);
+  const poetName = document.getElementById('poet').value.trim();
+  const region = document.getElementById('region').value.trim();
 
-    if (poet) query = query.eq('الشاعر.اسم_الشاعر', poet);
-    if (place) query = query.eq('المكان.اسم_المكان', place);
-    if (type) query = query.eq('نوع_الشعر', type);
-    if (purpose) query = query.eq('الغرض_الشعري', purpose);
+  let poetId = null;
 
-    const { data, error } = await query;
+  // 1️⃣ Retrieve poet ID based on the provided poet name (if selected)
+if (poetName) {
+  const { data: poetResult, error: poetError } = await supabase
+    .from('الشاعر')
+    .select('معرف_الشاعر, اسم_الشاعر')
+    .ilike('اسم_الشاعر', `%${poetName}%`)
+    .single();
 
-    if (error) {
-        console.error("Error filtering data:", error.message);
-        document.getElementById("alertBox").classList.add("show");
-        plotAllPins([]); // Show no pins if there's an error
-        return;
-    }
+  if (!poetError && poetResult) {
+    poetId = poetResult.معرف_الشاعر;
+  }
+}
 
-    const placesMatched = [...new Set(data.map(d => d.المكان?.اسم_المكان).filter(Boolean))];
+// 2️⃣ Build query to fetch places based on selected region (if any)
+let query = supabase
+  .from('المكان')
+  .select('معرف_المكان, اسم_المكان, الامارة, lat, lon, المدينة');
 
-    if (placesMatched.length === 0) {
-        document.getElementById("alertBox").classList.add("show");
-        plotAllPins([]);
-    } else {
-        document.getElementById("alertBox").classList.remove("show");
-        plotAllPins(placesMatched);
-    }
+if (region) query = query.eq('الامارة', region);
 
-    filterModal.classList.remove("show"); 
-    document.body.style.overflow = 'auto';
+// 3️⃣ Execute the query to retrieve places data
+const { data: placesData, error } = await query;
+
+// 4️⃣ Handle case of error or no matching results
+const alertBox = document.getElementById("alertBox");
+if (error || !placesData) {
+  alertBox.classList.add("show");
+  plotAllPins([]);  // Display no pins
+  return;
+}
+
+let filteredPlaces = placesData;
+
+// 5️⃣ If a poet is selected, further filter places to those linked to the poet's poems
+if (poetId) {
+  const { data: poemsData } = await supabase
+    .from('القصيدة')
+    .select('معرف_المكان, معرف_الشاعر')
+    .eq('معرف_الشاعر', poetId);
+
+  const allowedPlacesIds = poemsData.map(p => p.معرف_المكان);
+  filteredPlaces = filteredPlaces.filter(p => allowedPlacesIds.includes(p.معرف_المكان));
+}
+
+// 6️⃣ Display filtered results or show message if no matches found
+if (filteredPlaces.length === 0) {
+  alertBox.classList.add("show");
+  plotAllPins([]);  // No matching pins to show
+} else {
+  alertBox.classList.remove("show");
+  const placeIds = filteredPlaces.map(p => p.معرف_المكان);
+  plotAllPins(placeIds);  // Plot matching pins
+}
+
+  filterModal.classList.remove("show");
+  document.body.style.overflow = 'auto';
 });
+
+
+
 
 // Restore all pins (show all locations)
 function restoreAllPins() {
@@ -248,12 +334,13 @@ function restoreAllPins() {
 
 // Function to reset filters and hide relevant elements
 function resetFilters() {
-    document.querySelectorAll(".filter-form select").forEach(select => select.value = "");
-    document.getElementById("alertBox").classList.remove("show");
-    plotAllPins();
-    filterModal.classList.remove("show");
-    document.body.style.overflow = 'auto';
+  document.querySelectorAll(".filter-form select").forEach(select => select.value = "");
+  document.getElementById("alertBox").classList.remove("show");
+  plotAllPins();
+  filterModal.classList.add("show");
+  document.body.style.overflow = 'hidden';
 }
+
 
 // Event listener for the search button
 const mainSearchBtn = document.querySelector('.main-content .search-btn');
@@ -266,9 +353,8 @@ if (mainSearchBtn) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchPoetsAndTypes();
+    fetchPoetsAndRegions();
     initSaudiMap();
-    resetFilters();
 });
 
 // Handle window resize to make map responsive
@@ -302,3 +388,14 @@ window.addEventListener('resize', () => {
         }
     }, 250); // Adjust debounce time as needed
 });
+
+// retrive contor
+function openModal(title, contentHTML) {
+  document.getElementById("modal-title").innerText = title;
+  document.getElementById("modal-content").innerHTML = contentHTML;
+  document.getElementById("infoModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("infoModal").style.display = "none";
+}
