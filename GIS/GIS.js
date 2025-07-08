@@ -7,6 +7,8 @@ const supabase = window.supabase.createClient(
 let svg, projection, tooltip, allPins = [];
 let path;
 
+
+
 // Get references to filter modal elements
 const openFilterBtn = document.getElementById("openFilterBtn"); // The filter icon
 const filterModal = document.getElementById("filterModal");
@@ -160,8 +162,8 @@ async function plotAllPins(filteredPlaceIds = []) {
   let pinsToShow = places;
 
   if (filteredPlaceIds.length > 0) {
-  pinsToShow = places.filter(p => filteredPlaceIds.includes(p.معرف_المكان));
-}
+    pinsToShow = places.filter(p => filteredPlaceIds.includes(p.معرف_المكان));
+  }
 
   allPins = pinsToShow.filter(p => p.lat && p.lon);
 
@@ -169,93 +171,104 @@ async function plotAllPins(filteredPlaceIds = []) {
 
   svg.selectAll(".place-pin")
     .data(allPins)
-    .enter().append("circle")
+    .enter()
+    .append("text")
     .attr("class", "place-pin")
-    .attr("r", 6)
-    .attr("fill", filteredPlaceIds.length > 0 ? "orange" : "crimson")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("font-size", "24px")
     .attr("transform", d => `translate(${projection([d.lon, d.lat])})`)
+    .text("📍")
+    .style("cursor", "pointer")
+    .on("mouseover", function() {
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("font-size", "30px");
+    })
+    .on("mouseout", function() {
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("font-size", "24px");
+    })
     .on("click", async (event, d) => {
-  const { data, error } = await supabase
-    .from("القصيدة")
-    .select(`
-      النص_الشهري,
-      نوع_الشعر,
-      الغرض_الشعري,
-      العصر_الشعري,
-      الشاعر:معرف_الشاعر (اسم_الشاعر, تاريخ_ولادة_الشاعر, تاريخ_وفاة_الشاعر, صورة_الشاعر),
-      المصدر:معرف_المصدر (اسم_المصدر, اسم_المؤلف, تاريخ_النشر)
-    `)
-    .eq("معرف_المكان", d.معرف_المكان);
+      const { data, error } = await supabase
+        .from("القصيدة")
+        .select(`
+          النص_الشهري,
+          نوع_الشعر,
+          الغرض_الشعري,
+          العصر_الشعري,
+          الشاعر:معرف_الشاعر (اسم_الشاعر, تاريخ_ولادة_الشاعر, تاريخ_وفاة_الشاعر, صورة_الشاعر),
+          المصدر:معرف_المصدر (اسم_المصدر, اسم_المؤلف, تاريخ_النشر)
+        `)
+        .eq("معرف_المكان", d.معرف_المكان);
 
-  const { data: imagesData } = await supabase
-    .from("صورة_المكان")
-    .select("رابط_الصورة")
-    .eq("معرف_المكان", d.معرف_المكان);
+      const { data: imagesData } = await supabase
+        .from("صورة_المكان")
+        .select("رابط_الصورة")
+        .eq("معرف_المكان", d.معرف_المكان);
 
-  const images = imagesData?.map(img => img.رابط_الصورة) || [];
+      const images = imagesData?.map(img => img.رابط_الصورة) || [];
 
-  if (!data || data.length === 0) {
-    openModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
-    return;
-  }
-
-  const poem = data[0];
-
-  const contentHTML = `
-    <div class="modal-details">
-      <h3>${d.اسم_المكان}</h3>
-      <p><strong>الإمارة:</strong> ${d.الامارة}</p>
-      <p><strong>المدينة:</strong> ${d.المدينة}</p>
-      <hr />
-      <p><strong>النص:</strong> ${poem.النص_الشهري}</p>
-      <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
-      <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
-      <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
-      <p><strong>الشاعر:</strong> ${poem.الشاعر?.اسم_الشاعر}</p>
-      <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
-      <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
-      <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
-      <div class="image-slider">
-  <button id="prevImage">←</button>
-  <img id="slider-image" src="${images[0] || ''}" alt="صورة للموقع" />
-  <button id="nextImage">→</button>
-</div>
-
-  `;
-
-  openModal("تفاصيل الشعر", contentHTML);
-
-  // تفعيل أزرار التنقل بين الصور
-  setTimeout(() => {
-    let currentImageIndex = 0;
-    const sliderImg = document.getElementById('slider-image');
-    const prevBtn = document.getElementById('prevImage');
-    const nextBtn = document.getElementById('nextImage');
-
-    function showImage(index) {
-      if (sliderImg && images.length > 0) {
-        sliderImg.src = images[index];
+      if (!data || data.length === 0) {
+        openModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
+        return;
       }
-    }
 
-    if (prevBtn && nextBtn) {
-      prevBtn.onclick = () => {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        showImage(currentImageIndex);
-      };
+      const poem = data[0];
 
-      nextBtn.onclick = () => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        showImage(currentImageIndex);
-      };
-    }
-  }, 100);
-});
+      const contentHTML = `
+        <div class="modal-details">
+          <h3>${d.اسم_المكان}</h3>
+          <p><strong>الإمارة:</strong> ${d.الامارة}</p>
+          <p><strong>المدينة:</strong> ${d.المدينة}</p>
+          <hr />
+          <p><strong>النص:</strong> ${poem.النص_الشهري}</p>
+          <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
+          <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
+          <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
+          <p><strong>الشاعر:</strong> ${poem.الشاعر?.اسم_الشاعر}</p>
+          <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
+          <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
+          <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
+          <div class="image-slider">
+            <button id="prevImage">←</button>
+            <img id="slider-image" src="${images[0] || ''}" alt="صورة للموقع" />
+            <button id="nextImage">→</button>
+          </div>
+        </div>
+      `;
 
+      openModal("تفاصيل الشعر", contentHTML);
+
+      setTimeout(() => {
+        let currentImageIndex = 0;
+        const sliderImg = document.getElementById('slider-image');
+        const prevBtn = document.getElementById('prevImage');
+        const nextBtn = document.getElementById('nextImage');
+
+        function showImage(index) {
+          if (sliderImg && images.length > 0) {
+            sliderImg.src = images[index];
+          }
+        }
+
+        if (prevBtn && nextBtn) {
+          prevBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            showImage(currentImageIndex);
+          };
+
+          nextBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            showImage(currentImageIndex);
+          };
+        }
+      }, 100);
+    });
 }
-
 // Event listener for filter form submission
 document.querySelector('.filter-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -389,14 +402,145 @@ window.addEventListener('resize', () => {
     }, 250); // Adjust debounce time as needed
 });
 
-// retrive contor
-function openModal(title, contentHTML) {
-  document.getElementById("modal-title").innerText = title;
-  document.getElementById("modal-content").innerHTML = contentHTML;
-  document.getElementById("infoModal").style.display = "flex";
-}
+
+
 
 function closeModal() {
   document.getElementById("infoModal").style.display = "none";
 }
+
+function showInfoModal(data) {
+  const modal = document.getElementById('infoModal');
+  const poemTab = document.getElementById('poemTab');
+  const poetTab = document.getElementById('poetTab');
+  const modalPlaceImage = document.getElementById('modalPlaceImage');
+  const poetProfileImage = document.getElementById('poetProfileImage');
+
+  // صورة المكان (يمين)
+  document.querySelector('.modal-image').style.display = 'block';
+  modalPlaceImage.src = data.صورة_المكان || '../pictures/missing-photo.png';
+
+  // صورة الشاعر (يسار)
+  poetProfileImage.src = data.صورة_الشاعر || '../pictures/user-icon.png';
+
+  // تبويب الشعر
+
+poemTab.innerHTML = `
+  <div class="poem-info-modern">
+    <div class="info-row">
+      <span class="label">المكان:</span>
+      <span class="value">${data.اسم_المكان || 'غير معروف'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">نص الشعر:</span>
+      <div class="value poem-text">
+        ${data.النص_الشهري || 'غير متوفر'}
+      </div>
+    </div>
+
+    <div class="info-row">
+      <span class="label">نوع الشعر:</span>
+      <span class="value">${data.نوع_الشعر || 'غير محدد'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">الغرض الشعري:</span>
+      <span class="value">${data.الغرض_الشهري || 'غير محدد'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">العصر الشعري:</span>
+      <span class="value">${data.العصر_الشهري || 'غير معروف'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">المصدر:</span>
+      <span class="value">${data.اسم_المصدر || 'غير معروف'}</span>
+    </div>
+  </div>
+`;
+
+
+  // تبويب الشاعر
+poetTab.innerHTML = `
+  <div class="poet-info-modern">
+    <img id="poetProfileImage" src="${data.صورة_الشاعر || '../pictures/user-icon.png'}" alt="صورة الشاعر" class="poet-img" />
+    
+    <div class="info-row">
+      <span class="label">اسم الشاعر:</span>
+      <span class="value">${data.اسم_الشاعر || 'غير معروف'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">تاريخ الولادة:</span>
+      <span class="value">${data.تاريخ_ولادة_الشاعر || 'غير معروف'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">تاريخ الوفاة:</span>
+      <span class="value">${data.تاريخ_وفاة_الشاعر || 'غير معروف'}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">عدد الأشعار:</span>
+      <span class="value">${data.عدد_القصائد || 'غير معروف'}</span>
+    </div>
+  </div>
+`;
+
+  modal.style.display = 'flex';
+}
+
+function nextImage() {
+  if (placeImages.length === 0) return;
+  currentImageIndex = (currentImageIndex + 1) % placeImages.length;
+  document.getElementById('modalPlaceImage').src = placeImages[currentImageIndex];
+}
+
+function previousImage() {
+  if (placeImages.length === 0) return;
+  currentImageIndex = (currentImageIndex - 1 + placeImages.length) % placeImages.length;
+  document.getElementById('modalPlaceImage').src = placeImages[currentImageIndex];
+}
+
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('infoModal');
+  const modalContent = document.querySelector('.modal-content-custom');
+
+  if (modal.style.display === 'flex' && !modalContent.contains(event.target)) {
+    closeModal();
+  }
+});
+
+
+function switchTab(tabId, event) {
+  event.stopPropagation(); // ← هذا هو المهم
+
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+
+  document.querySelectorAll('.tab-button-modern').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  event.target.classList.add('active');
+}
+document.getElementById('poemBtn').addEventListener('click', function (event) {
+  switchTab('poemTab', event);
+});
+
+document.getElementById('poetBtn').addEventListener('click', function (event) {
+  switchTab('poetTab', event);
+});
+
+
+
+
+
+
+
 
