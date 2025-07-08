@@ -35,6 +35,8 @@
     </div>
     </section>
 
+
+
     <section class="map-container" id="map-section"> 
         <div id="map"></div>
         <i id="openFilterBtn" class="fas fa-sliders filter-icon-main"></i>
@@ -65,121 +67,158 @@
         </div>
     </section>
 
-    <section class="share-container" id="share-section">
-        <h2 class="share-header">شاركنا</h2>
+    <section class="form-container" id="share-section">
+  <h2 class="form-header">شاركنا</h2>
+  <form id="shareform2">
+    <div class="input-group">
+      <div class="form-field">
+        <label for="name">الاسم</label>
+        <input type="text" id="name" name="name" placeholder="مثال: أحمد">
+      </div>
+      <div class="form-field">
+        <label for="email">الايميل</label>
+        <input type="email" id="email" name="email" placeholder="مثال: ahmed@email.com">
+      </div>
+    </div>
 
-        <form id="shareform2">
-            <div class="input-group">
-                <div class="form-field">
-                    <label for="name">الاسم</label>
-                    <input type="text" id="name" name="name" placeholder="مثال: أحمد">
-                </div>
-                <div class="form-field">
-                    <label for="email">الايميل</label>
-                    <input type="email" id="email" name="email"placeholder="مثال: ahmed@email.com">
-                </div>
-            </div>
+    <div class="input-group">
+      <div class="form-field">
+        <label for="phone">رقم الهاتف</label>
+        <input type="tel" id="phone" name="phone" placeholder="مثال: +9665XXXXXXXX">
+      </div>
+      <div class="form-field">
+        <label for="share-type">نوع المشاركة</label>
+        <select name="share-type" id="share-type">
+          <option value="">اختر نوع المشاركة...</option>
+          <option value="add-poem">إضافة شعر</option>
+          <option value="edit-mistake">تعديل خطأ</option>
+        </select>
+      </div>
+    </div>
 
-            <div class="input-group">
-                <div class="form-field">
-                    <label for="phone">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone" placeholder="مثال: +9665XXXXXXXX">
-                </div>
-                <div class="form-field">
-                    <label for="share-type">نوع المشاركة</label>
-                    <select name="share-type" id="share-type">
-                        <option value="">اختر نوع المشاركة...</option>
-                        <option value="add-poem">إضافة شعر</option>
-                        <option value="edit-mistake">تعديل خطأ</option>
-                    </select>
-                </div>
-            </div>
+    <div class="input-group hidden-fields" id="addPoemFields">
+      <div class="form-field">
+        <label for="poetName">اسم الشاعر</label>
+        <input type="text" id="poetName" name="poetName">
+      </div>
+      <div class="form-field">
+        <label for="poemTitle">الغرض الشعري</label>
+        <input type="text" id="poemTitle" name="poemTitle">
+      </div>
+      <div class="form-field full-width">
+        <label for="poemLocation">المكان</label>
+        <input type="text" id="poemLocation" name="poemLocation">
+      </div>
+      <div class="form-field full-width">
+        <label for="poemExcerpt">جزئية الشعر</label>
+        <textarea name="poemExcerpt" id="poemExcerpt"></textarea>
+      </div>
+    </div>
 
-            <div class="input-group hidden-fields" id="addPoemFields">
-                <div class="form-field">
-                    <label for="poetName">اسم الشاعر</label>
-                    <input type="text" id="poetName" name="poetName">
-                </div>
-                <div class="form-field">
-                    <label for="poemTitle">الغرض الشعري</label>
-                    <input type="text" id="poemTitle" name="poemTitle">
-                </div>
-                <div class="form-field full-width">
-                    <label for="poemLocation">المكان</label>
-                    <input type="text" id="poemLocation" name="poemLocation">
-                </div>
-                <div class="form-field full-width">
-                    <label for="poemExcerpt">جزئية الشعر</label>
-                    <textarea name="poemExcerpt" id="poemExcerpt"></textarea>
-                </div>
-            </div>
+    <div id="editMistakeFields" class="input-group hidden-fields">
+      <div class="form-field">
+        <label for="editType">نوع التعديل</label>
+        <select name="editType" id="editType">
+          <option value="">اختر نوع التعديل ...</option>
+          <option value="typo">خطأ إملائي</option>
+          <option value="factual">خطأ في معلومة</option>
+          <option value="other">أخرى</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="editTitle">عنوان التعديل</label>
+        <input type="text" id="editTitle" name="editTitle">
+      </div>
+      <div class="form-field full-width">
+        <label for="suggestedEdit">التعديل المقترح</label>
+        <textarea name="suggestedEdit" id="suggestedEdit"></textarea>
+      </div>
+    </div>
 
-            <div id="editMistakeFields" class="input-group hidden-fields">
-                <div class="form-field">
-                    <label for="editType">نوع التعديل</label>
-                    <select name="editType" id="editType">
-                        <option value="">اختر نوع التعديل ...</option>
-                        <option value="typo">خطأ إملائي</option>
-                        <option value="factual">خطأ في معلومة</option>
-                        <option value="other">أخرى</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label for="editTitle">عنوان التعديل</label>
-                    <input type="text" id="editTitle" name="editTitle">
-                </div>
-                <div class="form-field full-width">
-                    <label for="suggestedEdit">التعديل المقترح</label>
-                    <textarea name="suggestedEdit" id="suggestedEdit"></textarea>
-                </div>
-            </div>
+    <div class="btn-container">
+      <button type="submit" class="btn">إرسال</button>
+    </div>
+  </form>
+</section>
 
-            <div class="btn-container">
-                <button type="submit" class="btn">إرسال</button>
-            </div>
-        </form>
-    </section>
+<section id="contactModal" class="modal">
+  <div class="form-container modal-content">
+    <span class="close-button">&times;</span>
+    <h2 class="form-header">تواصل معنا</h2>
 
-    <section id="contactModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2 class="modal-header">تواصل معنا</h2>
-            <form  id="shareForm">
-                <div class="input-group">
-                    <div class="form-field">
-                        <label for="contactName">الاسم</label>
-                        <input type="text" id="contactName" name="contactName" placeholder="مثال: أحمد">
-                    </div>
-                    <div class="form-field">
-                        <label for="contactEmail">الايميل</label>
-                        <input type="email" id="contactEmail" name="contactEmail" placeholder="مثال: ahmed@email.com">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="form-field full-width">
-                        <label for="contactSubject">الموضوع</label>
-                        <input type="text" id="contactSubject" name="contactSubject" placeholder="مثال: استفسار عن ..">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="form-field full-width">
-                        <label for="contactMessage">الرسالة</label> <textarea id="contactMessage" name="contactMessage" placeholder="اكتب رسالتك هنا..."></textarea>
-                    </div>
-                </div>
-                <div class="btn-container">
-                    <button type="submit" class="btn">إرسال</button>
-                </div>
-            </form>
-            </div>
-    </section>
+    <form id="shareForm">
+      <div class="input-group">
+        <div class="form-field">
+          <label for="contactName">الاسم</label>
+          <input type="text" id="contactName" name="contactName" placeholder="مثال: أحمد">
+        </div>
+        <div class="form-field">
+          <label for="contactEmail">الايميل</label>
+          <input type="email" id="contactEmail" name="contactEmail" placeholder="مثال: ahmed@email.com">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="form-field full-width">
+          <label for="contactSubject">الموضوع</label>
+          <input type="text" id="contactSubject" name="contactSubject" placeholder="مثال: استفسار عن ..">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="form-field full-width">
+          <label for="contactMessage">الرسالة</label>
+          <textarea id="contactMessage" name="contactMessage" placeholder="اكتب رسالتك هنا..."></textarea>
+        </div>
+      </div>
+
+      <div class="btn-container">
+        <button type="submit" class="btn">إرسال</button>
+      </div>
+    </form>
+  </div>
+</section>
+
 <script src="../JS/contactForm.js"></script>
 
-<!-- Modal لعرض بيانات الموقع والقصيدة -->
-<div id="infoModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close-button" onclick="closeModal()">&times;</span>
-    <h2 id="modal-title">اسم المكان</h2>
-    <div id="modal-content">
+<!-- نافذة عرض المعلومات -->
+<div id="infoModal" class="modal" style="display: none;">
+  <div class="modal-content-custom">
+
+    <!-- صورة المكان -->
+    <div class="modal-image">
+      <img id="modalPlaceImage" src="" alt="صورة المكان" />
+    </div>
+
+    <!-- المحتوى النصي -->
+    <div style="flex: 1;">
+      <!-- زر الإغلاق -->
+      <span class="close-button" onclick="closeModal()">&times;</span>
+
+      <!-- أزرار التبويبات -->
+      <div class="tab-buttons-modern">
+        <button id="poemBtn" class="tab-button-modern active">الشعر</button>
+        <button id="poetBtn" class="tab-button-modern">الشاعر</button>
+      </div>
+
+      <!-- تبويب الشعر -->
+      <div class="tab-content" id="poemTab">
+        <!-- يتم تعبئة المحتوى من JS -->
+      </div>
+
+      <!-- تبويب الشاعر -->
+      <div class="tab-content" id="poetTab" style="display: none;">
+        <div class="poet-info">
+          <!-- صورة الشاعر -->
+          <img id="poetProfileImage" src="" alt="صورة الشاعر" class="poet-img" />
+          
+          <!-- معلومات الشاعر -->
+          <p><strong>اسم الشاعر:</strong> <span id="poetName"></span></p>
+          <p><strong>تاريخ الولادة:</strong> <span id="poetBirth"></span></p>
+          <p><strong>تاريخ الوفاة:</strong> <span id="poetDeath"></span></p>
+          <p><strong>عدد الأشعار:</strong> <span id="poemCount"></span></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
