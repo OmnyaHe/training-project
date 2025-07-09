@@ -165,38 +165,61 @@ async function plotAllPins(filteredPlaceIds = []) {
     pinsToShow = places.filter(p => filteredPlaceIds.includes(p.معرف_المكان));
   }
 
+  const locationTooltip = d3.select("body")
+  .append("div")
+  .attr("class", "location-tooltip")
+  .style("visibility", "hidden");
+
   allPins = pinsToShow.filter(p => p.lat && p.lon);
 
   svg.selectAll(".place-pin").remove();
 
+  svg.selectAll(".place-pin").remove();
+
   svg.selectAll(".place-pin")
-    .data(allPins)
-    .enter()
-    .append("text")
-    .attr("class", "place-pin")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("font-size", "24px")
-    .attr("transform", d => `translate(${projection([d.lon, d.lat])})`)
-    .text("📍")
-    .style("cursor", "pointer")
-    .on("mouseover", function() {
-      d3.select(this)
-        .transition()
-        .duration(200)
-        .attr("font-size", "30px");
-    })
-    .on("mouseout", function() {
-      d3.select(this)
-        .transition()
-        .duration(200)
-        .attr("font-size", "24px");
-    })
-    .on("click", async (event, d) => {
+  .data(allPins)
+  .enter()
+  .append("circle")
+  .attr("class", "place-pin")
+  .attr("r", 6)
+  .attr("fill", filteredPlaceIds.length > 0 ? "orange" : "crimson")
+  .attr("stroke", "#fff")
+  .attr("stroke-width", 1.5)
+  .attr("transform", d => `translate(${projection([d.lon, d.lat])})`)
+
+  .on("mouseover", function(event, d) {
+    locationTooltip
+      .style("visibility", "visible")
+      .html(`📍 ${d.اسم_المكان || 'موقع غير معروف'}`)
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 20) + "px");
+
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .attr("r", 8);
+  })
+
+  .on("mousemove", function(event) {
+    locationTooltip
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 20) + "px");
+  })
+
+  .on("mouseout", function() {
+    locationTooltip.style("visibility", "hidden");
+
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .attr("r", 6);
+  })
+
+  .on("click", async (event, d) => {
       const { data, error } = await supabase
         .from("القصيدة")
         .select(`
-          النص_الشهري,
+          النص_الشعري,
           نوع_الشعر,
           الغرض_الشعري,
           العصر_الشعري,
@@ -225,7 +248,7 @@ async function plotAllPins(filteredPlaceIds = []) {
           <p><strong>الإمارة:</strong> ${d.الامارة}</p>
           <p><strong>المدينة:</strong> ${d.المدينة}</p>
           <hr />
-          <p><strong>النص:</strong> ${poem.النص_الشهري}</p>
+          <p><strong>النص:</strong> ${poem.النص_الشعري}</p>
           <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
           <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
           <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
@@ -243,10 +266,10 @@ async function plotAllPins(filteredPlaceIds = []) {
 
       showInfoModal({
   اسم_المكان: d.اسم_المكان,
-  النص_الشهري: poem.النص_الشهري,
+  النص_الشعري: poem.النص_الشعري,
   نوع_الشعر: poem.نوع_الشعر,
   الغرض_الشعري: poem.الغرض_الشعري,
-  العصر_الشهري: poem.العصر_الشهري,
+  العصر_الشعري: poem.العصر_الشعري,
   المصدر: poem.المصدر?.اسم_المصدر,
   اسم_الشاعر: poem.الشاعر?.اسم_الشاعر,
   تاريخ_ولادة_الشاعر: poem.الشاعر?.تاريخ_ولادة_الشاعر,
@@ -282,6 +305,7 @@ async function plotAllPins(filteredPlaceIds = []) {
       }, 100);
     });
 }
+
 // Event listener for filter form submission
 document.querySelector('.filter-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -448,7 +472,7 @@ poemTab.innerHTML = `
     <div class="info-row">
       <span class="label">نص الشعر:</span>
       <div class="value poem-text">
-        ${data.النص_الشهري || 'غير متوفر'}
+        ${data.النص_الشعري || 'غير متوفر'}
       </div>
     </div>
 
@@ -459,12 +483,12 @@ poemTab.innerHTML = `
 
     <div class="info-row">
       <span class="label">الغرض الشعري:</span>
-      <span class="value">${data.الغرض_الشهري || 'غير محدد'}</span>
+      <span class="value">${data.الغرض_الشعري || 'غير محدد'}</span>
     </div>
 
     <div class="info-row">
       <span class="label">العصر الشعري:</span>
-      <span class="value">${data.العصر_الشهري || 'غير معروف'}</span>
+      <span class="value">${data.العصر_اشعري || 'غير معروف'}</span>
     </div>
 
     <div class="info-row">
