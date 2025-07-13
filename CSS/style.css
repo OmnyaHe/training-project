@@ -326,15 +326,9 @@ img.logo {
   justify-content: center;
   align-items: center;
   position: relative; 
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  will-change: opacity, transform;
 }
-.map-container.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+
+
 
 #map {
   width: 100%; 
@@ -342,6 +336,8 @@ img.logo {
   position: relative;
   border-radius: 10px;
   overflow: hidden;
+
+  
 }
 
 .map-tooltip {
@@ -748,6 +744,16 @@ img.logo {
   transform: scale(0.95);
 }
 
+#share-section {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#share-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* Modal Structure (no input styles here) */
 #contactModal.modal {
@@ -819,7 +825,7 @@ img.logo {
 
 /* تنسيق محتوى المودال */
 .modal-content-custom {
-  background: #1e1e1e;
+  background: #313131;
   color: #fff;
   border-radius: 20px;
   padding: 20px;
@@ -850,20 +856,35 @@ img.logo {
 /* التبويبات */
 .tab-buttons-modern {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a2a2a;
+  border-radius: 30px;
+  padding: 8px;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
 }
 .tab-button-modern {
+  flex: 1;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #ccc;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.tab-button-modern:hover {
   background-color: #444;
   color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
 }
 .tab-button-modern.active {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--color-text-main);
+  color: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 /* المحتوى داخل التبويبات */
@@ -879,6 +900,14 @@ img.logo {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.poem-text {
+  font-family: 'Amiri', serif;
+  font-size: 15px;
+  line-height: 2;
+  color: #EEE; 
+  text-align: center;
+  white-space:  pre;
 }
 .info-row {
   display: flex;
@@ -897,8 +926,8 @@ img.logo {
 
 /* صورة الشاعر */
 .poet-img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 50%;
   margin: 0 auto 15px;
@@ -1154,3 +1183,4 @@ img.logo {
 .app-stores img {
     margin-left: 0 !important;
 }
+

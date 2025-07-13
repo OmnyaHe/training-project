@@ -39,7 +39,7 @@
         </div>
 
         <section class="main-content">
-            <p class="poem-intro" style="font-size: 36px; font-weight: 700; line-height: 1.8; font-family: 'Amiri', serif;">هنا... حيث نُسج الشعر على خارطة الوطن <br>
+            <p class="poem-intro " style="font-size: 36px; font-weight: 700; line-height: 1.8; font-family: 'Amiri', serif;">هنا... حيث نُسج الشعر على خارطة الوطن <br>
                 من أعماق القصائد العربية، نُحيي الأماكن التي خلدها الشعراء في أرض المملكة. <br>
                 استكشف خريطة المملكة بعيون الشعراء
             </p>
@@ -149,7 +149,7 @@
         <input type="text" id="poemLocation" name="poemLocation">
       </div>
       <div class="form-field full-width">
-        <label for="poemExcerpt">جزئية الشعر</label>
+        <label for="poemExcerpt">النص الشعر</label>
         <textarea name="poemExcerpt" id="poemExcerpt"></textarea>
       </div>
     </div>
@@ -338,27 +338,39 @@
 </footer>
 <script>
   const header = document.querySelector('.header-section');
-  const mainContent = document.querySelector('.map-container');
-  const introText = document.querySelector('.poem-intro');
+  const mapContainer = document.querySelector('.map-container');
+  const shareSection = document.getElementById('share-section');
 
-  window.addEventListener('scroll', () => {
+  function handleScroll() {
     const scrollY = window.scrollY;
 
-    // إخفاء الهيدر تدريجيًا مع السكروول
+    // إخفاء الهيدر تدريجيًا
     if (scrollY > 100) {
       header.classList.add('fade-out');
     } else {
       header.classList.remove('fade-out');
     }
 
-    // ظهور السكشن الثاني بحركة
-    const rect = mainContent.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 100) {
-      mainContent.classList.add('show');
+    // تشغيل الانيميشن عند ظهور الخريطة
+    const rect = mapContainer.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 150) {
+      mapContainer.classList.add('show');
     }
-   
-  });
+
+    const shareRect = shareSection.getBoundingClientRect();
+  if (shareRect.top < window.innerHeight - 150) {
+    shareSection.classList.add('show');
+  }
+  }
+
+  // تفعيل عند فتح الصفحة
+  window.addEventListener('load', handleScroll);
+
+  // تفعيل عند السكرول
+  window.addEventListener('scroll', handleScroll);
+  
 </script>
+
 
 </body>
 </html>
