@@ -19,10 +19,11 @@
   --border-radius-md: 20px;
 }
 
+
 body {
   margin: 0;
-  font-family: "Lama Sans", sans-serif;
-  background: var(--color-background);
+  font-family:  'Tajawal', 'Amiri', sans-serif;
+  background: var(--color-text-main);
   color: #BEAD9D;
   direction: rtl;
   text-align: right;
@@ -36,7 +37,7 @@ body {
 
 /* style for header*/
 .header-section {
-  background-image: url(../pictures/back.png);
+  background-image: url(../pictures/background.png);
   backdrop-filter: blur(2px); 
   background-size: cover;
   background-position: center;
@@ -48,7 +49,18 @@ body {
   align-items: center;
   padding-top: 20px;
   box-sizing: border-box;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: 2;
   position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  will-change: opacity, transform;
+}
+
+.header-section.fade-out {
+  opacity: 0;
+  transform: translateY(-100px);
+  pointer-events: none;
 }
 
 .top-bar-container {
@@ -188,29 +200,50 @@ img.logo {
 
 /* style for main content*/
 .main-content {
-  border-radius: var(--border-radius-lg);
   padding: 40px;
-  width: 90%;
-  max-width: 900px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+  width: 70%;
   margin-top: 20px;
   margin-bottom: 50px;
   box-sizing: border-box;
-  color: var(--color-text-light);
+  color: var(--color-close-btn);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .main-content p {
-  font-size: 32px;
+  font-size: 10px;
   line-height: 1.5;
   margin-bottom: 30px;
-  color: white;
+  color: #d3beaa;
   text-align: center;
   font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  
 }
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.poem-intro, .search-btn {
+  animation: fadeInUp 1.2s ease-out forwards;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.8;
+  font-family: 'Amiri', serif;
+  text-align: center;
+  opacity: 0; /* تبدأ مخفية */
+  transform: translateY(40px);
+  margin: 0 auto;
+  animation-delay: 0.4s;
+}
+
 
 /* Search button styling */
 .search-btn {
@@ -219,12 +252,12 @@ img.logo {
   border: none;
   background: none;
   cursor: pointer;
-  --primary-color: white;
+  --primary-color: rgb(42, 20, 6);
   --hovered-color: #BEAD9D;
   position: relative;
   display: flex;
-  font-weight: 600;
-  font-size: 30px;
+  font-weight: 300;
+  font-size: 20px;
   gap: 0.5rem;
   align-items: center;
   color: var(--primary-color);
@@ -293,6 +326,14 @@ img.logo {
   justify-content: center;
   align-items: center;
   position: relative; 
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
+}
+.map-container.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 #map {

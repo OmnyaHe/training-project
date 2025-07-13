@@ -6,6 +6,9 @@
     <title>الخريطة الشعرية</title>
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -36,7 +39,7 @@
         </div>
 
         <section class="main-content">
-            <p>هنا... حيث نُسج الشعر على خارطة الوطن <br>
+            <p class="poem-intro" style="font-size: 36px; font-weight: 700; line-height: 1.8; font-family: 'Amiri', serif;">هنا... حيث نُسج الشعر على خارطة الوطن <br>
                 من أعماق القصائد العربية، نُحيي الأماكن التي خلدها الشعراء في أرض المملكة. <br>
                 استكشف خريطة المملكة بعيون الشعراء
             </p>
@@ -321,6 +324,29 @@
 
     </div>
 </footer>
+<script>
+  const header = document.querySelector('.header-section');
+  const mainContent = document.querySelector('.map-container');
+  const introText = document.querySelector('.poem-intro');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+
+    // إخفاء الهيدر تدريجيًا مع السكروول
+    if (scrollY > 100) {
+      header.classList.add('fade-out');
+    } else {
+      header.classList.remove('fade-out');
+    }
+
+    // ظهور السكشن الثاني بحركة
+    const rect = mainContent.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 100) {
+      mainContent.classList.add('show');
+    }
+   
+  });
+</script>
 
 </body>
 </html>
