@@ -40,17 +40,20 @@ if (filterModal) {
 }
 
 // Fetch poets, places, and poem types for filter dropdowns
-async function fetchPoetsAndRegions() {
+async function fetchFilterOptions() {
+  
   const { data: poetData, error: poetError } = await supabase.from('الشاعر').select('اسم_الشاعر');
   const { data: placeData, error: placeError } = await supabase.from('المكان').select('الامارة');
+  const { data: poemData, error: poemError } = await supabase.from('القصيدة').select('نوع_الشعر, الغرض_الشعري, العصر_الشعري');
 
   if (poetError) console.error("Error fetching poets:", poetError.message);
   if (placeError) console.error("Error fetching regions:", placeError.message);
+  if (poemError) console.error("Error fetching poems:", poemError.message);
 
   const fillSelect = (id, items) => {
     const el = document.getElementById(id);
     el.innerHTML = '<option value="">اختر</option>';
-    [...new Set(items.filter(Boolean))].sort().forEach(val => {
+    [...new Set(items.filter(Boolean).map(v => v.trim()))].sort().forEach(val => {
       const opt = document.createElement('option');
       opt.value = val;
       opt.textContent = val;
@@ -59,9 +62,13 @@ async function fetchPoetsAndRegions() {
   };
 
   fillSelect('poet', poetData?.map(p => p.اسم_الشاعر) || []);
-  const cleanedRegions = [...new Set(placeData.map(p => p.الامارة ? p.الامارة.trim() : null).filter(Boolean))].sort();
-  fillSelect('region', cleanedRegions);
+  fillSelect('region', placeData?.map(p => p.الامارة) || []);
+  fillSelect('poemType', poemData?.map(p => p.نوع_الشعر) || []);
+  fillSelect('poemPurpose', poemData?.map(p => p.الغرض_الشعري) || []);
+  fillSelect('poemEra', poemData?.map(p => p.العصر_الشعري) || []);
 }
+
+
 
 
 // Get colors for Saudi regions
@@ -312,6 +319,9 @@ document.querySelector('.filter-form').addEventListener('submit', async (e) => {
 
   const poetName = document.getElementById('poet').value.trim();
   const region = document.getElementById('region').value.trim();
+  const type = document.getElementById('poemType').value.trim();
+  const purpose = document.getElementById('poemPurpose').value.trim();
+  const era = document.getElementById('poemEra').value.trim();
 
   let poetId = null;
 
@@ -349,15 +359,28 @@ if (error || !placesData) {
 let filteredPlaces = placesData;
 
 // 5️⃣ If a poet is selected, further filter places to those linked to the poet's poems
-if (poetId) {
-  const { data: poemsData } = await supabase
-    .from('القصيدة')
-    .select('معرف_المكان, معرف_الشاعر')
-    .eq('معرف_الشاعر', poetId);
+const { data: poemsData } = await supabase
+  .from('القصيدة')
+  .select('معرف_المكان, معرف_الشاعر, نوع_الشعر, الغرض_الشعري, العصر_الشعري');
 
-  const allowedPlacesIds = poemsData.map(p => p.معرف_المكان);
-  filteredPlaces = filteredPlaces.filter(p => allowedPlacesIds.includes(p.معرف_المكان));
+let filteredPoems = poemsData;
+
+if (poetId) {
+  filteredPoems = filteredPoems.filter(p => p.معرف_الشاعر === poetId);
 }
+if (type) {
+  filteredPoems = filteredPoems.filter(p => p.نوع_الشعر === type);
+}
+if (purpose) {
+  filteredPoems = filteredPoems.filter(p => p.الغرض_الشعري === purpose);
+}
+if (era) {
+  filteredPoems = filteredPoems.filter(p => p.العصر_الشعري === era);
+}
+
+const allowedPlacesIds = filteredPoems.map(p => p.معرف_المكان);
+filteredPlaces = filteredPlaces.filter(p => allowedPlacesIds.includes(p.معرف_المكان));
+
 
 // 6️⃣ Display filtered results or show message if no matches found
 if (filteredPlaces.length === 0) {
@@ -403,7 +426,7 @@ if (mainSearchBtn) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchPoetsAndRegions();
+    fetchFilterOptions();
     initSaudiMap();
 });
 
@@ -488,12 +511,12 @@ poemTab.innerHTML = `
 
     <div class="info-row">
       <span class="label">العصر الشعري:</span>
-      <span class="value">${data.العصر_اشعري || 'غير معروف'}</span>
+      <span class="value">${data.العصر_الشعري || 'غير معروف'}</span>
     </div>
 
     <div class="info-row">
       <span class="label">المصدر:</span>
-      <span class="value">${data.اسم_المصدر || 'غير معروف'}</span>
+      <span class="value">${data.المصدر || 'غير معروف'}</span>
     </div>
   </div>
 `;
