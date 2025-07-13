@@ -74,19 +74,19 @@ async function fetchFilterOptions() {
 // Get colors for Saudi regions
 function getSaudiColors() {
     return {
-        "منطقة الرياض": "#1A6566",
-        "منطقة مكة المكرمة": "#0c9560",
-        "منطقة المدينة المنورة": "#BEAD9D", 
-        "منطقة الشرقية": "#DBD1C5",
-        "منطقة عسير": "#737476", 
-        "منطقة تبوك": "#293242",
-        "منطقة الحدود الشمالية": "#BEAD9D", 
-        "منطقة الجوف": "#0c9560",
-        "منطقة جازان": "#621d52", 
-        "منطقة نجران": "#21445B",
-        "منطقة الباحة": "#323050", 
-        "منطقة القصيم": "#21445B",
-        "منطقة حائل": "#621d52"
+    "منطقة الرياض": "rgba(139, 69, 19, 0.6)",     // بني محروق مشبع
+    "منطقة مكة المكرمة": "rgba(205, 133, 63, 0.6)", // بيج دافئ مشبع
+    "منطقة المدينة المنورة": "rgba(98, 29, 82, 0.6)", // بنفسجي من الهوية مشبع
+    "منطقة الشرقية": "rgba(12, 149, 96, 0.6)",    // أخضر هوية مشبع
+    "منطقة عسير": "rgba(120, 66, 18, 0.6)",        // بني برتقالي مشبع
+    "منطقة تبوك": "rgba(41, 50, 66, 0.6)",        // كحلي غامق مشبع
+    "منطقة الجوف": "rgba(180, 120, 80, 0.6)",      // بيج مائل للنحاسي
+    "منطقة الحدود الشمالية": "rgba(111, 45, 25, 0.6)", // بني دموي مشبع
+    "منطقة نجران": "rgba(130, 20, 80, 0.6)",       // بنفسجي محمر
+    "منطقة جازان": "rgba(0, 128, 64, 0.6)",        // أخضر زمردي قوي
+    "منطقة الباحة": "rgba(200, 160, 120, 0.6)",    // بيج مشبع
+    "منطقة حائل": "rgba(70, 40, 30, 0.6)",         // بني قاتم
+    "منطقة القصيم": "rgba(160, 90, 50, 0.6)" 
     };
 }
 
@@ -134,23 +134,43 @@ async function initSaudiMap() {
         projection.fitSize([width, height], geojson);
 
         // Draw regions
-        svg.selectAll(".region")
-            .data(geojson.features.filter(f => f.geometry.type !== "Point"))
-            .enter().append("path")
-            .attr("class", "region")
-            .attr("d", path)
-            .attr("fill", d => getSaudiColors()[d.properties.name] || "#ccc")
-            .attr("stroke", "#000")
-            .attr("stroke-width", 1)
-            .on("mouseover", (e, d) => {
-                d3.select(e.currentTarget).attr("stroke-width", 2);
-                tooltip.style("visibility", "visible").html(`<strong>${d.properties.name}</strong>`)
-                    .style("left", (e.pageX + 15) + "px").style("top", (e.pageY - 20) + "px");
-            })
-            .on("mouseout", (e) => {
-                d3.select(e.currentTarget).attr("stroke-width", 1);
-                tooltip.style("visibility", "hidden");
-            });
+       svg.selectAll(".region")
+  .data(geojson.features.filter(f => f.geometry.type !== "Point"))
+  .enter().append("path")
+  .attr("class", "region")
+  .attr("d", path)
+  .attr("fill", d => getSaudiColors()[d.properties.name] || "#ccc")
+  .attr("stroke", "#000")
+  .attr("stroke-width", 1)
+
+  .attr("transform-origin", "center center")
+.style("transition", "all 0.2s ease")
+  .on("mouseover", (e, d) => {
+    d3.select(e.currentTarget)
+        .transition()
+        .duration(200)
+        .attr("transform", "scale(1.05)")
+        .attr("stroke", "#444")
+        .attr("stroke-width", 2);
+
+    tooltip.style("visibility", "visible")
+        .html(`<strong>${d.properties.name}</strong>`)
+        .style("left", (e.pageX + 15) + "px")
+        .style("top", (e.pageY - 20) + "px");
+})
+.on("mouseout", (e, d) => {
+    d3.select(e.currentTarget)
+        .transition()
+        .duration(200)
+        .attr("transform", "scale(1)")
+        .attr("stroke", "#000")
+        .attr("stroke-width", 1);
+
+    tooltip.style("visibility", "hidden");
+});
+
+
+
 
         plotAllPins();
 
