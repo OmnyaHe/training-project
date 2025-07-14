@@ -808,18 +808,18 @@ img.logo {
 /* قسم الصورة */
 .modal-image {
   position: relative;
-  width: 250px;
-  height: 400px;
+  width: 350px;
+  height: 100%;
   overflow: hidden;
 }
 .image-wrapper {
   position: relative;
-  width: 250px;
-  height: 400px;
+  width: 350px;
+  height: 100%;
 }
 .image-wrapper img {
-  width: 250px;
-  height: 400px;
+  width: 350px;
+  height: 100%;
   border-radius: 10px;
 }
 .image-overlay-icon {
