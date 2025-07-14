@@ -7,7 +7,7 @@
   --color-contact-container: rgba(190, 173, 157, 0.7);
   --color-contact-container-shadow: rgba(190, 173, 157, 0.2);
   --color-text-main: #BEAD9D;
-  --color-text-light: rgba(211, 211, 211, 1);
+  --color-text-light: #EEEFEE;
   --color-text-dark: #323050;
   --color-form-field: rgba(50, 48, 80, 0.7);
   --color-contact-input: rgba(43, 24, 7, 0.48);
@@ -31,8 +31,9 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding-bottom: 50px;
+  padding-bottom: 10px;
   box-sizing: border-box;
+  gap: 200px;
 }
 
 /* style for header*/
@@ -49,7 +50,7 @@ body {
   align-items: center;
   padding-top: 20px;
   box-sizing: border-box;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease-out;
   z-index: 2;
   position: relative;
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
@@ -61,6 +62,10 @@ body {
   opacity: 0;
   transform: translateY(-100px);
   pointer-events: none;
+  height: 0;
+  padding: 0;
+  margin-bottom: 0;
+  overflow: hidden;
 }
 
 .top-bar-container {
@@ -68,6 +73,7 @@ body {
   border-radius: var(--border-radius-lg);
   padding: 15px 30px;
   width: 90%;
+  height: 60px;
   max-width: 1000px;
   margin-bottom: 40px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
@@ -85,7 +91,7 @@ header {
 }
 
 img.logo {
-  height: 80px;
+  height: 100px;
   margin-left: 10px;
 }
 
@@ -212,12 +218,13 @@ img.logo {
 }
 
 .main-content p {
-  font-size: 10px;
-  line-height: 1.5;
+  font-size: 36px;
+  line-height: 1.8;
   margin-bottom: 30px;
   color: #d3beaa;
   text-align: center;
   font-weight: 700;
+  font-family: 'Amiri', serif;
   
 }
 @keyframes fadeInUp {
@@ -319,13 +326,13 @@ img.logo {
 }
 /* style for map*/
 .map-container {
-  width: 100%;
   max-width: 700px; 
-  margin: 50px auto; 
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative; 
+  margin: 0 auto 20px auto; /* وسط الصفحة وتحتها مسافة بسيطة */
+  width: calc(100% - 280px);
 }
 
 
@@ -386,7 +393,6 @@ img.logo {
 }
 
 /* style for filter section */
-/* style for filter section */
 .map-filter-wrapper {
   display: flex;
   flex-direction: row;
@@ -407,13 +413,6 @@ img.logo {
   display: none !important;
 }
 
-.map-container {
-  margin: 0 auto 20px auto; /* وسط الصفحة وتحتها مسافة بسيطة */
-  width: calc(100% - 280px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .side-filter {
   position: fixed;
@@ -957,215 +956,242 @@ img.logo {
 
 /* style for footer */
 .main-footer {
-    background-color: #cccccc73;
-    border-radius: var(--border-radius-lg);
-    color: var(--color-text-dark);
-    padding: 30px 20px;
-    width: 95%;
-    box-sizing: border-box;
-    margin-top: 50px;
-    margin-bottom: -40px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #cccccc73;
+  border-radius: var(--border-radius-lg);
+  color: var(--color-text-dark);
+  padding: 15px 10px;
+  width: 95%;
+  box-sizing: border-box;
+  margin-top: 50px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer-content {
-    display: flex;
-    justify-content: space-around;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    gap: 30px;
+  display: flex;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
 }
 
 .footer-section {
-    flex: 1;
-    min-width: 250px;
-    padding: 10px;
+  flex: 1;
+  min-width: 250px;
+  padding: 10px;
 }
 
 .footer-section h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    position: relative;
-    padding-bottom: 10px;
-    color: var(--color-text-dark);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 5px;
+  color: var(--color-text-dark);
+  text-align: right;
 }
 
-/* الخط تحت العناوين */
 .footer-section h3::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 200px;
-    height: 1.5px;
-    background-color: var(--color-text-dark);
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 200px;
+  height: 1.5px;
+  background-color: var(--color-text-dark);
 }
 
 .footer-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .footer-section ul li {
-    margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .footer-section ul li a {
-    color: var(--color-text-light);
-    text-decoration: none;
-    font-size: 16px;
-    transition: color 0.3s ease;
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  direction: rtl;
 }
 
 .footer-section ul li a:hover {
-    color: var(--color-text-main);
+  color: var(--color-text-main);
 }
 
 .social-icons .wrapper,
 .app-stores .wrapper {
-    display: flex;
-    list-style: none;
-    height: auto;
-    width: auto;
-    padding: 0;
-    justify-content: flex-start;
-    margin: 0;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
-    margin-bottom: 30px;
+  display: flex;
+  list-style: none;
+  height: auto;
+  width: auto;
+  padding: 0;
+  justify-content: flex-start;
+  margin: 0;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 .social-icons .icon,
 .app-stores .icon {
-    position: relative;
-    background: var(--color-light-bg-primary);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  background: var(--color-light-bg-primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .social-icons .icon a,
 .app-stores .icon a {
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    color: var(--color-text-dark);
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--color-text-dark);
 }
 
 .social-icons .icon svg,
 .social-icons .icon i,
 .app-stores .icon i {
-    font-size: 24px;
-    transition: color 0.3s ease, fill 0.3s ease;
+  font-size: 15px;
+  transition: color 0.3s ease, fill 0.3s ease;
 }
 
-/* Tooltip styles */
 .wrapper .tooltip {
-    position: absolute;
-    top: 0;
-    font-size: 14px;
-    background: var(--color-contact-input);
-    color: var(--color-text-light);
-    padding: 5px 8px;
-    border-radius: 5px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: var(--color-contact-input);
+  color: var(--color-text-light);
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .wrapper .tooltip::before {
-    position: absolute;
-    content: "";
-    height: 8px;
-    width: 8px;
-    background: var(--color-contact-input);
-    bottom: -3px;
-    left: 50%;
-    transform: translate(-50%) rotate(45deg);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: var(--color-contact-input);
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .wrapper .icon:hover .tooltip {
-    top: -45px;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .wrapper .icon:hover {
-    background: var(--color-btn-hover);
+  background: var(--color-btn-hover);
 }
 
 .wrapper .facebook:hover {
-    background: #1877f2;
+  background: #1877f2;
 }
 .wrapper .facebook:hover svg {
-    fill: #fff;
-    color: #fff;
+  fill: #fff;
+  color: #fff;
 }
 
 .wrapper .twitter:hover {
-    background: #1da1f2;
+  background: #1da1f2;
 }
 .wrapper .twitter:hover svg {
-    fill: #fff;
-    color: #fff;
+  fill: #fff;
+  color: #fff;
 }
 
 .wrapper .instagram:hover {
-    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
 .wrapper .instagram:hover svg {
-    fill: #fff;
-    color: #fff;
+  fill: #fff;
+  color: #fff;
 }
 
 .wrapper .linkedin:hover {
-    background: #0A66C2;
+  background: #0A66C2;
 }
 .wrapper .linkedin:hover i {
-    color: #fff;
+  color: #fff;
 }
 
-/* Hover colors for App Store Icons */
 .wrapper .apple-app-store:hover {
-    background: #000000;
+  background: #000000;
 }
 .wrapper .apple-app-store:hover i {
-    color: #fff;
+  color: #fff;
 }
 
 .wrapper .google-play-store:hover {
-    background: #4285F4;
+  background: #4285F4;
 }
 .wrapper .google-play-store:hover i {
-    color: #fff;
+  color: #fff;
 }
 
 .social-icons a i,
 .app-stores a i,
 .social-icons img,
 .app-stores img {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
+.footer-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-text-dark);
+  font-size: 14px;
+  direction: rtl;
+}
+
+.footer-bottom p {
+  margin: 0 50px;
+  text-align: right;
+  flex-grow: 1;
+}
+
+.footer-bottom img {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+  margin-left: 80px;
+}
 
 /* زر السهم */
 .slider-arrow {
@@ -1289,4 +1315,18 @@ img.logo {
   100% { transform: scale(1); }
 }
 
+#map,
+.main-footer,
+.form-container { /* أضف أي أقسام أخرى تحتاج للأنيميشن */
+    opacity: 0;
+    transform: translateY(20px); /* أو أي تأثير بدء آخر */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    margin-top: 0;
+}
 
+#map.show,
+.main-footer.show,
+.form-container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
