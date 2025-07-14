@@ -7,38 +7,6 @@ const supabase = window.supabase.createClient(
 let svg, projection, tooltip, allPins = [];
 let path;
 
-
-
-// Get references to filter modal elements
-const openFilterBtn = document.getElementById("openFilterBtn"); // The filter icon
-const filterModal = document.getElementById("filterModal");
-const closeFilterModalBtn = document.getElementById("closeFilterModalBtn"); // The close button inside the filter modal
-
-// Event listeners for opening and closing the filter modal
-if (openFilterBtn) {
-    openFilterBtn.onclick = () => {
-        filterModal.classList.add("show");
-        document.body.style.overflow = 'hidden'; // Disable body scroll
-    };
-}
-
-if (closeFilterModalBtn) {
-    closeFilterModalBtn.onclick = () => {
-        filterModal.classList.remove("show");
-        document.body.style.overflow = 'auto'; // Re-enable body scroll
-    };
-}
-
-// Close filter modal if clicked outside of the modal content
-if (filterModal) {
-    window.addEventListener('click', (event) => {
-        if (event.target === filterModal) {
-            filterModal.classList.remove("show");
-            document.body.style.overflow = 'auto';
-        }
-    });
-}
-
 // Fetch poets, places, and poem types for filter dropdowns
 async function fetchFilterOptions() {
   
@@ -406,13 +374,7 @@ if (filteredPlaces.length === 0) {
   alertBox.classList.remove("show");
   const placeIds = filteredPlaces.map(p => p.معرف_المكان);
   plotAllPins(placeIds);  // Plot matching pins
-}
-
-  filterModal.classList.remove("show");
-  document.body.style.overflow = 'auto';
-});
-
-
+}});
 
 
 // Restore all pins (show all locations)
