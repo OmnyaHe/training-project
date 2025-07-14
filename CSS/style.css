@@ -846,6 +846,22 @@ img.logo {
   height: 400px;
   overflow: hidden;
 }
+.image-wrapper {
+  position: relative;
+  width: 250px;
+  height: 400px;
+}
+.image-wrapper img {
+  width: 250px;
+  height: 400px;
+  border-radius: 10px;
+}
+.image-overlay-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 10;
+}
 
 .modal-image img {
   width: 100%;
@@ -1182,5 +1198,128 @@ img.logo {
 .social-icons img,
 .app-stores img {
     margin-left: 0 !important;
+}
+
+
+/* زر السهم */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* شكل السهم بالرسم */
+.slider-arrow::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  transition: border-color 0.2s;
+}
+
+/* السهم عند hover */
+.slider-arrow:hover::before {
+  border-color: #ccc;
+}
+
+/* سهم لليسار */
+.left-arrow {
+  left: 10px;
+}
+
+.left-arrow::before {
+  transform: rotate(-135deg);
+}
+
+/* سهم لليمين */
+.right-arrow {
+  right: 10px;
+}
+
+.right-arrow::before {
+  transform: rotate(45deg);
+}
+/* سكرول*/
+#poemTab {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#poemTab::-webkit-scrollbar {
+  width: 8px;
+}
+
+#poemTab::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#poemTab::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+}
+
+#poemTab::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+
+/* location icon*/
+.location-icon-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+.loader {
+  width: 16px;
+  height: 16px;
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.loader::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  border-radius: 50% 50% 0;
+  border: 5px solid #c01111; /* لون رمادي صغير */
+  transform: rotate(45deg) translate(0, 0);
+  box-sizing: border-box;
+  animation: animMarker 0.4s ease-in-out infinite alternate;
+}
+
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 150%;
+  width: 8px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  animation: animShadow 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes animMarker {
+  0% { transform: rotate(45deg) translate(2px, 2px); }
+  100% { transform: rotate(45deg) translate(-2px, -2px); }
+}
+
+@keyframes animShadow {
+  0% { transform: scale(0.5); }
+  100% { transform: scale(1); }
 }
 

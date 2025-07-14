@@ -283,11 +283,6 @@ async function plotAllPins(filteredPlaceIds = []) {
           <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
           <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
           <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
-          <div class="image-slider">
-            <button id="prevImage">←</button>
-            <img id="slider-image" src="${images[0] || ''}" alt="صورة للموقع" />
-            <button id="nextImage">→</button>
-          </div>
         </div>
       `;
 
@@ -307,29 +302,30 @@ async function plotAllPins(filteredPlaceIds = []) {
 });
 
       setTimeout(() => {
-        let currentImageIndex = 0;
-        const sliderImg = document.getElementById('slider-image');
-        const prevBtn = document.getElementById('prevImage');
-        const nextBtn = document.getElementById('nextImage');
+  let currentImageIndex = 0;
+  const modalPlaceImage = document.getElementById('modalPlaceImage');
+  const prevBtn = document.getElementById('prevImage');
+  const nextBtn = document.getElementById('nextImage');
 
-        function showImage(index) {
-          if (sliderImg && images.length > 0) {
-            sliderImg.src = images[index];
-          }
-        }
+  function showImage(index) {
+    if (images.length > 0 && modalPlaceImage) {
+      modalPlaceImage.src = images[index];
+    }
+  }
 
-        if (prevBtn && nextBtn) {
-          prevBtn.onclick = () => {
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-            showImage(currentImageIndex);
-          };
+  if (prevBtn && nextBtn) {
+    prevBtn.onclick = () => {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      showImage(currentImageIndex);
+    };
 
-          nextBtn.onclick = () => {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            showImage(currentImageIndex);
-          };
-        }
-      }, 100);
+    nextBtn.onclick = () => {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      showImage(currentImageIndex);
+    };
+  }
+}, 100);
+
     });
 }
 
@@ -496,6 +492,7 @@ function showInfoModal(data) {
   const modalPlaceImage = document.getElementById('modalPlaceImage');
   const poetProfileImage = document.getElementById('poetProfileImage');
 
+
   // صورة المكان (يمين)
   document.querySelector('.modal-image').style.display = 'block';
   modalPlaceImage.src = data.صورة_المكان || '../pictures/missing-photo.png';
@@ -504,19 +501,19 @@ function showInfoModal(data) {
   poetProfileImage.src = data.صورة_الشاعر || '../pictures/user-icon.png';
 
   // تبويب الشعر
-
 poemTab.innerHTML = `
   <div class="poem-info-modern">
-    <div class="info-row">
-      <span class="label">المكان:</span>
-      <span class="value">${data.اسم_المكان || 'غير معروف'}</span>
-    </div>
 
     <div class="info-row">
       <span class="label">نص الشعر:</span>
       <div class="value poem-text">
-        ${(data.النص_الشعري || 'غير متوفر').replace(/\n/g, "<br>")}
+        ${(data.النص_الشعري || 'غير متوفر')}
       </div>
+    </div>
+
+    <div class="info-row">
+      <span class="label">المكان:</span>
+      <span class="value">${data.اسم_المكان || 'غير معروف'}</span>
     </div>
 
     <div class="info-row">
@@ -538,8 +535,10 @@ poemTab.innerHTML = `
       <span class="label">المصدر:</span>
       <span class="value">${data.المصدر || 'غير معروف'}</span>
     </div>
+
   </div>
 `;
+
 
 
   // تبويب الشاعر
@@ -572,26 +571,6 @@ poetTab.innerHTML = `
   modal.style.display = 'flex';
 }
 
-function nextImage() {
-  if (placeImages.length === 0) return;
-  currentImageIndex = (currentImageIndex + 1) % placeImages.length;
-  document.getElementById('modalPlaceImage').src = placeImages[currentImageIndex];
-}
-
-function previousImage() {
-  if (placeImages.length === 0) return;
-  currentImageIndex = (currentImageIndex - 1 + placeImages.length) % placeImages.length;
-  document.getElementById('modalPlaceImage').src = placeImages[currentImageIndex];
-}
-
-window.addEventListener('click', function(event) {
-  const modal = document.getElementById('infoModal');
-  const modalContent = document.querySelector('.modal-content-custom');
-
-  if (modal.style.display === 'flex' && !modalContent.contains(event.target)) {
-    closeModal();
-  }
-});
 
 
 function switchTab(tabId, event) {
