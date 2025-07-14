@@ -64,17 +64,9 @@
     </section>
 
 
-    <section class="map-container" id="map-section"> 
-        <div id="map"></div>
-        <i id="openFilterBtn" class="fas fa-sliders filter-icon-main"></i>
-    </section>
-
-        
-   <section id="filterModal" class="modal">
-  <div class="filter-modal-content">
-    <span class="close-button" id="closeFilterModalBtn">&times;</span>
+    <section class="map-container" id="map-section">
+  <aside class="side-filter">
     <h2 class="modal-header">تصفية البحث</h2>
-
     <form class="filter-form">
       <label for="poet">اسم الشاعر</label>
       <select id="poet"><option value="">اختر</option></select>
@@ -93,7 +85,9 @@
 
       <button type="submit">بحث</button>
     </form>
-  </div>
+  </aside>
+
+  <div id="map"></div>
 </section>
 
 
@@ -369,6 +363,16 @@
   if (shareRect.top < window.innerHeight - 150) {
     shareSection.classList.add('show');
   }
+    const filterSidebar = document.querySelector('.side-filter');
+
+  if (shareRect.top < window.innerHeight - 150) {
+    // إذا اقتربنا من الفورم، أخفِ الفلتر
+    filterSidebar.classList.add('hidden');
+  } else {
+    // إذا رجعنا فوق للخريطة، أظهر الفلتر
+    filterSidebar.classList.remove('hidden');
+  }
+
   }
 
   // تفعيل عند فتح الصفحة

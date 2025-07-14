@@ -386,119 +386,85 @@ img.logo {
 }
 
 /* style for filter section */
-#openFilterBtn { 
-  font-size: 1.5rem;
-  color: #BEAD9D;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
-  z-index: 100;
-  background-color: rgba(92, 74, 62, 0.7);
-  padding: 10px;
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease;
+/* style for filter section */
+.map-filter-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
 }
 
-#openFilterBtn:hover {
-  background-color: rgba(92, 74, 62, 0.9);
-}
-
-#filterModal.modal {
-  display: none;
-  position: fixed;
-  z-index: 200;
-  left: 0;
-  top: 0;
+.map-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: var(--color-contact-container-shadow);
+  min-height: 100vh;
+}
+
+.side-filter.hidden {
+  display: none !important;
+}
+
+.map-container {
+  margin: 0 auto 20px auto; /* وسط الصفحة وتحتها مسافة بسيطة */
+  width: calc(100% - 280px);
+  display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#filterModal.modal.show {
-  display: flex;
-  opacity: 1;
-  visibility: visible;
+.side-filter {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #f7f0e8;
+  padding: 20px;
+  border-left: 1px solid #ccc;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
 
-.filter-modal-content {
-  background-color: var(--color-contact-container);
-  padding: 30px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-  box-sizing: border-box;
-  text-align: right;
-}
-
-.filter-modal-content .modal-header {
-  color: var(--color-text-dark);
-}
-
-.filter-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.filter-form label {
+.side-filter h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
   font-weight: bold;
-  color: var(--color-text-dark);
-  margin-top: 5px;
+  color: #a07e64;
+  text-align: center;
 }
 
-.filter-form select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-  background-repeat: no-repeat;
-  background-position: left 15px center;
-  padding-right: 15px; 
-  padding-left: 50px; 
+.side-filter label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
 }
 
-.filter-form input,
-.filter-form select {
-  padding: 0.5rem 1.2rem;
-  border: none;
-  border-radius: 2rem;
-  background-color: var(--color-contact-input);
-  color: #EEEFEF;
-  font-family: 'Lama Sans', sans-serif;
-  font-size: 1rem;
+.side-filter select,
+.side-filter button {
   width: 100%;
-  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }
 
-.filter-form button {
-  padding: 0.7rem 2.5rem;
-  background-color: var(--color-text-dark);
-  color: var(--color-text-light);
+.side-filter button {
+  margin-top: 18px;
+  background-color: #5e4b3c;
+  color: #fff;
   border: none;
-  border-radius: 2rem;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 1.1rem;
-  align-self: center;
-  margin-top: 20px;
-  transition: background-color 0.3s ease;
 }
 
-.filter-form button:hover {
-  background-color: var(--color-btn-hover);
+.side-filter button:hover {
+  background-color: #3e3228;
 }
-
 /* style for alert box*/
 #alertBox {
   position: fixed;
@@ -1322,4 +1288,5 @@ img.logo {
   0% { transform: scale(0.5); }
   100% { transform: scale(1); }
 }
+
 
