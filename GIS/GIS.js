@@ -152,8 +152,7 @@ async function initSaudiMap() {
 
 async function plotAllPins(filteredPlaceIds = []) {
   const { data: places } = await supabase.from("المكان")
-    .select("اسم_المكان, lat, lon, معرف_المكان, الامارة, المدينة");
-
+    .select("اسم_المكان, lat, lon, معرف_المكان, الامارة, المدينة, قوقل_ماب");
   let pinsToShow = places;
 
   if (filteredPlaceIds.length > 0) {
@@ -266,7 +265,9 @@ async function plotAllPins(filteredPlaceIds = []) {
   تاريخ_وفاة_الشاعر: poem.الشاعر?.تاريخ_وفاة_الشاعر,
   عدد_القصائد: poem.الشاعر?.عدد_القصائد,
   صورة_المكان: images[0] || '',
-  صورة_الشاعر: poem.الشاعر?.صورة_الشاعر
+  جميع_الصور: images,
+  صورة_الشاعر: poem.الشاعر?.صورة_الشاعر,
+  googleMapUrl: d.قوقل_ماب  
 });
 
       setTimeout(() => {
@@ -475,7 +476,10 @@ poemTab.innerHTML = `
 
     <div class="info-row">
       <span class="label">المكان:</span>
-      <span class="value">${data.اسم_المكان || 'غير معروف'}</span>
+      <span class="value">
+       ${data.اسم_المكان || 'غير معروف'}
+       ${data.googleMapUrl ? `<img id="locationIcon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="موقع على الخريطة" class="inline-map-icon" />` : ''}
+      </span>
     </div>
 
     <div class="info-row">
@@ -500,6 +504,23 @@ poemTab.innerHTML = `
 
   </div>
 `;
+
+// Show arrows only if there is more than one image
+function updateArrowVisibility(images) {
+  const leftArrow = document.getElementById('prevImage');
+  const rightArrow = document.getElementById('nextImage');
+
+  if (!images || images.length <= 1) {
+    leftArrow.style.display = 'none';
+    rightArrow.style.display = 'none';
+  } else {
+    leftArrow.style.display = 'block';
+    rightArrow.style.display = 'block';
+  }
+}
+
+
+updateArrowVisibility(data.جميع_الصور);
 
 
 
@@ -531,6 +552,18 @@ poetTab.innerHTML = `
 `;
 
   modal.style.display = 'flex';
+
+  // Make location icon clickable to open Google Maps URL
+  setTimeout(() => {
+  const locationIcon = document.getElementById('locationIcon');
+  if (locationIcon && data.googleMapUrl) {
+    locationIcon.style.cursor = 'pointer';
+    locationIcon.onclick = () => {
+      window.open(data.googleMapUrl, '_blank');
+    };
+  }
+}, 0);
+
 }
 
 
