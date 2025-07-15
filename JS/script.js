@@ -107,4 +107,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // FAQ Modal functionality
+    const faqModal = document.getElementById('faqModal');
+    const openFaqModalBtns = document.querySelectorAll('#openFaqModal'); 
+    const closeFaqModalBtn = faqModal.querySelector('.close-button-faq');
+    const faqQuestions = faqModal.querySelectorAll('.faq-question');
+
+    openFaqModalBtns.forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            event.preventDefault();
+            faqModal.classList.add('show-modal');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    closeFaqModalBtn.addEventListener('click', () => {
+        faqModal.classList.remove('show-modal');
+        document.body.style.overflow = 'auto';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === faqModal) {
+            faqModal.classList.remove('show-modal');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const isActive = question.classList.contains('active');
+
+            faqQuestions.forEach(q => {
+                if (q !== question && q.classList.contains('active')) {
+                    q.classList.remove('active');
+                    q.nextElementSibling.style.display = 'none';
+                }
+            });
+
+            if (isActive) {
+                question.classList.remove('active');
+                answer.style.display = 'none';
+            } else {
+                question.classList.add('active');
+                answer.style.display = 'block';
+            }
+        });
+    });
+
 });

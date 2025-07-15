@@ -5,7 +5,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // نموذج تواصل معنا
-document.getElementById("shareForm").addEventListener("submit", async function (e) {
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const nameInput = document.getElementById("contactName");
@@ -77,7 +77,7 @@ document.getElementById("shareForm").addEventListener("submit", async function (
 });
 
 // ✅ نموذج شاركنا
-document.getElementById("shareform2").addEventListener("submit", async function (e) {
+document.getElementById("shareform").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const nameInput = document.getElementById("name");
@@ -232,7 +232,7 @@ document.getElementById("shareform2").addEventListener("submit", async function 
 
   if (error) {
     console.error("خطأ أثناء الإرسال:", error.message);
-    showError(document.getElementById("shareform2"), "حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
+    showError(document.getElementById("shareform"), "حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
   } else {
     alert("تم الإرسال بنجاح! شكرًا لمساهمتك ❤️");
     e.target.reset();
@@ -282,7 +282,7 @@ function clearAllErrors() {
 document.querySelectorAll(".close-button").forEach(button => {
   button.addEventListener("click", () => {
     clearAllErrors();
-    document.getElementById("shareForm").reset();
-    document.getElementById("shareform2").reset();
+    document.getElementById("contactForm").reset();
+    document.getElementById("shareform").reset();
   });
 });
