@@ -420,18 +420,26 @@ img.logo {
   right: 0;
   width: 280px;
   height: 100vh;
-  background-color: #f7f0e8;
+  border-radius: var(--border-radius-lg);
+  background-color: #cccccc73;
+  color: var(--color-text-dark);
+box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-left: 1px solid #ccc;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.side-filter.show {
+  opacity: 1;
 }
 
 .side-filter h2 {
   font-size: 20px;
   margin-bottom: 15px;
   font-weight: bold;
-  color: #a07e64;
+  color:var(--color-text-dark);
   text-align: center;
 }
 
@@ -440,30 +448,62 @@ img.logo {
   margin-top: 12px;
   font-weight: bold;
   font-size: 14px;
-  color: #333;
+  color: var(--color-text-dark);;
 }
 
-.side-filter select,
-.side-filter button {
+.side-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgba(255, 255, 255, 0.3); /* خلفية شبه شفافة */
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 16px; /* حواف منحنية */
+  padding: 12px 16px;
+  font-size: 15px;
+  color: var(--color-text-dark);;
   width: 100%;
-  margin-top: 6px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-image: url("data:image/svg+xml,%3Csvg fill='%23333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  padding-left: 48px;
+  transition: all 0.3s ease;
 }
 
-.side-filter button {
-  margin-top: 18px;
-  background-color: #5e4b3c;
-  color: #fff;
-  border: none;
+.side-filter select:focus {
+   outline: none;
+  border-color: #a07e64;
+  box-shadow: 0 0 0 3px rgba(160, 126, 100, 0.3);
+}
+
+.side-filter select:hover {
+ background-color: rgba(255, 255, 255, 0.35);
   cursor: pointer;
 }
 
-.side-filter button:hover {
-  background-color: #3e3228;
+.side-filter button {
+  margin: 30px auto 0;
+  display: block;
+  background-color: #6e4f3a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 14px 32px;
+  font-size: 18px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+  width: 80%;
+  max-width: 220px;
+  text-align: center;
 }
+
+.side-filter button:hover {
+  background-color: #4e392a;
+  transform: translateY(-2px);
+}
+
 /* style for alert box*/
 #alertBox {
   position: fixed;
@@ -803,36 +843,48 @@ img.logo {
   overflow: hidden;
   direction: rtl;
 }
-
 /* قسم الصورة */
 .modal-image {
   position: relative;
   width: 350px;
-  height: 100%;
+  height:auto; 
+  border-radius: 15px;
   overflow: hidden;
 }
+
+/* Center image vertically with natural height */
+#modalPlaceImage {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: auto; 
+  object-position: center;
+  border-radius: 15px;
+  display: block;
+  z-index: 1;
+}
+
+/* Style for the clickable location icon overlay on the image */
 .image-wrapper {
   position: relative;
   width: 350px;
   height: 100%;
 }
-.image-wrapper img {
-  width: 350px;
-  height: 100%;
-  border-radius: 10px;
-}
-.image-overlay-icon {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  z-index: 10;
+
+.inline-map-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
 }
 
-.modal-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 15px;
+.inline-map-icon:hover {
+  transform: scale(1.3) rotate(8deg);
+  filter: brightness(1.4) drop-shadow(0 0 4px rgba(255, 0, 0, 0.4));
 }
 /* التبويبات */
 .tab-buttons-modern {
@@ -969,6 +1021,7 @@ img.logo {
   justify-content: center;
   align-items: center;
 }
+
 
 .footer-content {
   display: flex;
@@ -1330,3 +1383,7 @@ img.logo {
     opacity: 1;
     transform: translateY(0);
 }
+
+
+
+
