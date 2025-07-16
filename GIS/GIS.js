@@ -42,18 +42,18 @@ async function fetchFilterOptions() {
 // Get colors for Saudi regions
 function getSaudiColors() {
     return {
-    "منطقة الرياض": "rgba(110, 75, 58, 0.5)",     // بني طيني
-    "منطقة مكة المكرمة": "rgba(203, 180, 156, 0.5)", // بيج رملي
-    "منطقة المدينة المنورة": "rgba(98, 29, 82, 0.5)", // بنفسجي من الهوية
-    "منطقة الشرقية": "rgba(12, 149, 96, 0.5)",    // أخضر من الهوية
-    "منطقة عسير": "rgba(77, 46, 32, 0.5)",        // بني شوكولاتة
-    "منطقة تبوك": "rgba(41, 50, 66, 0.5)",        // كحلي داكن من الهوية
-    "منطقة الجوف": "rgba(168, 145, 120, 0.5)",    // بيج داكن
-    "منطقة الحدود الشمالية": "rgba(110, 75, 58, 0.5)", // بني
-    "منطقة نجران": "rgba(98, 29, 82, 0.5)",       // بنفسجي
-    "منطقة جازان": "rgba(12, 149, 96, 0.5)",      // أخضر
-    "منطقة الباحة": "rgba(203, 180, 156, 0.5)",   // بيج رملي
-    "منطقة حائل": "rgba(41, 50, 66, 0.5)",        // كحلي داكن
+    "منطقة الرياض": "rgba(110, 75, 58, 0.5)",  
+    "منطقة مكة المكرمة": "rgba(203, 180, 156, 0.5)", 
+    "منطقة المدينة المنورة": "rgba(98, 29, 82, 0.5)", 
+    "منطقة الشرقية": "rgba(12, 149, 96, 0.5)",    
+    "منطقة عسير": "rgba(77, 46, 32, 0.5)",      
+    "منطقة تبوك": "rgba(41, 50, 66, 0.5)",        
+    "منطقة الجوف": "rgba(168, 145, 120, 0.5)",   
+    "منطقة الحدود الشمالية": "rgba(110, 75, 58, 0.5)",
+    "منطقة نجران": "rgba(98, 29, 82, 0.5)",       
+    "منطقة جازان": "rgba(12, 149, 96, 0.5)",      
+    "منطقة الباحة": "rgba(41, 50, 66, 0.5)",   
+    "منطقة حائل": "rgba(41, 50, 66, 0.5)",        
     "منطقة القصيم": "rgba(168, 145, 120, 0.5)" 
     };
 }
@@ -242,7 +242,7 @@ async function plotAllPins(filteredPlaceIds = []) {
           <p><strong>الإمارة:</strong> ${d.الامارة}</p>
           <p><strong>المدينة:</strong> ${d.المدينة}</p>
           <hr />
-          <p><strong>النص:</strong> ${poem.النص_الشعري}</p>
+          poemTab.innerHTML = createExpandablePoem(poem.النص_الشعري);
           <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
           <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
           <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
@@ -448,6 +448,44 @@ function closeModal() {
   document.getElementById("infoModal").style.display = "none";
 }
 
+// Formats Arabic poem text 
+function formatPoem(text) {
+  return text
+    .split('\n')
+    .map(line => {
+      const [firstHalf, secondHalf] = line.split(/،|,|؛|؛|\s{2,}/); 
+      if (secondHalf) {
+        return `<div class="poem-line"><span class="half right">${firstHalf}</span><span class="half left">${secondHalf}</span></div>`;
+      } else {
+        return `<div class="poem-line single">${line}</div>`;
+      }
+    })
+    .join('');
+}
+
+// Displays only the first two lines of a poem with a "اقرأ المزيد" toggle button to reveal the rest if available
+function formatPoemWithToggle(text) {
+  const lines = (text || '').split('\n').filter(line => line.trim() !== '');
+  
+  if (lines.length <= 2) {
+    return `<div class="poem-wrapper">${formatPoem(text)}</div>`;
+  }
+
+  const firstTwo = lines.slice(0, 2).join('\n');
+  const rest = lines.slice(2).join('\n');
+
+  return `
+    <div class="poem-wrapper">
+      <div class="poem-part" id="shortPoem">${formatPoem(firstTwo)}</div>
+      <div class="poem-part" id="fullPoem" style="display:none;">${formatPoem(rest)}</div>
+      <button id="expandPoemBtn" class="read-more-inline">اقرأ المزيد</button>
+    </div>
+  `;
+}
+
+
+
+
 function showInfoModal(data) {
   const modal = document.getElementById('infoModal');
   const poemTab = document.getElementById('poemTab');
@@ -466,14 +504,13 @@ function showInfoModal(data) {
   // تبويب الشعر
 poemTab.innerHTML = `
   <div class="poem-info-modern">
-
     <div class="info-row">
       <span class="label">نص الشعر:</span>
       <div class="value poem-text">
-        ${(data.النص_الشعري || 'غير متوفر')}
+       ${formatPoemWithToggle(data.النص_الشعري || 'غير متوفر')}
       </div>
     </div>
-
+  
     <div class="info-row">
       <span class="label">المكان:</span>
       <span class="value">
@@ -563,6 +600,19 @@ poetTab.innerHTML = `
     };
   }
 }, 0);
+
+// Enable the "اقرأ المزيد" button to reveal the rest of the poem when clicked
+setTimeout(() => {
+  const btn = document.getElementById('expandPoemBtn');
+  const full = document.getElementById('fullPoem');
+  if (btn && full) {
+    btn.onclick = () => {
+      full.style.display = 'block';
+      btn.style.display = 'none';
+    };
+  }
+}, 0);
+
 
 }
 
