@@ -161,9 +161,11 @@ document.addEventListener('DOMContentLoaded', function() {
 const header = document.querySelector('.header-section');
   const mapContainer = document.getElementById('map');
   const shareSection = document.getElementById('share-section');
+  const aiAnalyzer = document.getElementById('ai-analyzer');
   const footer = document.querySelector('.main-footer');
   const searchBtn = document.querySelector('.search-btn');
   const filterSidebar = document.querySelector('.side-filter');
+  
 
   // Smooth scroll to map
   if (searchBtn && mapContainer) {
@@ -199,11 +201,12 @@ if (window.scrollY > 100) {
 
     // Show animations
     toggleShowOnScroll(mapContainer);
+    toggleShowOnScroll(aiAnalyzer);
     const isShareVisible = toggleShowOnScroll(shareSection);
     toggleShowOnScroll(footer);
 
     // Hide filter if share section is visible
-    filterSidebar.classList.toggle('hidden', isShareVisible);
+    filterSidebar.classList.toggle('hidden', isShareVisible || toggleShowOnScroll(aiAnalyzer));
   }
 
   window.addEventListener('load', handleScroll);

@@ -1600,3 +1600,69 @@ box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
 .faq-answer p {
   margin: 0;
 }
+
+
+
+.try-chatbot-section {
+  padding: 80px 40px;
+  max-width: 1000px;
+  position: relative;
+  text-align: center;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.chatbot-heading {
+  font-size: 38px;
+  color: #4e4038;
+  margin-bottom: 20px;
+  font-weight: 800;
+}
+
+.chatbot-subtitle {
+  color: #4e4038;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.chatbot-input-box {
+  background: #e7ded8;
+  border-radius: 20px;
+  display: flex;
+  border: 2px solid #d8c5c5;
+  width: 750px;
+  height: 90px;
+  padding: 2px;
+}
+
+
+.chatbot-input-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-size: 18px;
+  color: #333;
+  padding: 16px;
+  outline: none;
+  text-align: right;
+}
+
+.chatbot-input-box button {
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 200px;
+  height: 60px;
+  margin-top: 15px;
+  margin-left: 18px;
+}
+
+.chatbot-input-box button:hover {
+  background-color: #333;
+}
+
