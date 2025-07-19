@@ -17,25 +17,40 @@
     <script src="../GIS/GIS.js" defer></script>    
 </head>
   <body>
-    <section class="header-section">
+    <section class="header-section" id="header">
         <section class="top-bar-container">
             <header>
                 <img src="../pictures/ddc-logo.png" alt="Logo" class="logo"/>
 
                 <div class="nav-links-wrapper">
-                    <div class="nav-links">
-                        <a href="#">الصفحة الرئيسية</a>
-                        <a href="#map-section" id="scroll-to-map"> الخريطة الشعرية</a> 
-                        <a href="#ai-analyzer"> الغرض  الشعري</a> 
-                        <div class="dropdown">
-                            <a href="#" class="dropbtn" id="contactDropdownBtn">تواصل معنا <span class="dropdown-arrow"></span></a>
-                            <div class="dropdown-content" id="contactDropdownContent">
-                                <a href="#share-section" id="scroll-to-share">شاركنا</a>
-                                <a href="#" id="open-contact-modal">تواصل</a>
-                            </div>
+                    <div class="nav-links" id="nav-links">
+                      <span class="close-menu" onclick="open_close_menu()">&times;</span>
+                      <img src="../pictures/footer-logo.png" alt="Logo" class="logo-menu"/>
+                      <a href="#header">الصفحة الرئيسية</a>
+                      <a href="#map-section" id="scroll-to-map"> الخريطة الشعرية</a> 
+                      <a href="#ai-analyzer"> الغرض  الشعري</a> 
+                      <div class="dropdown">
+                        <a href="#" class="dropbtn" id="contactDropdownBtn">تواصل معنا <span class="dropdown-arrow"></span></a>
+                        <div class="dropdown-content" id="contactDropdownContent">
+                          <a href="#share-section" id="scroll-to-share">شاركنا</a>
+                          <a href="#" id="open-contact-modal">تواصل</a>
                         </div>
+                      </div>
                     </div>
                 </div>
+
+                <button class="menu-toggle-btn" aria-label="تبديل قائمة التنقل" onclick="open_close_menu()">
+                  <i class="bi bi-list"></i>
+                </button>
+
+                <script>
+                  const navLinks = document.getElementById("nav-links");
+
+                  function open_close_menu(){
+                      navLinks.classList.toggle("active")
+                  }
+                </script>
+
             </header>
         </section>
 
@@ -44,7 +59,7 @@
                 من أعماق القصائد العربية، نُحيي الأماكن التي خلدها الشعراء في أرض المملكة. <br>
                 استكشف خريطة المملكة بعيون الشعراء
             </p>
-            <button class="search-btn">
+            <button class="search-btn" id="scroll-to-map">
                 <p>ابدأ رحلتك الشعرية</p>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +80,13 @@
     </section>
 
     <section class="map-container" id="map-section">
-      <aside class="side-filter">
+      <button class="filter-toggle-btn" aria-label="تبديل فلتر الخريطة" onclick="open_close_filter()">
+        <i class="bi bi-sliders"></i>
+      </button>
+      
+      <section class="side-filter" id="side-filter">
         <h2 class="modal-header">  تصفية البحــث</h2>
-        <form class="filter-form">
+        <form class="filter-form" onsubmit="handleFilterSubmit(event)">
           <label for="poet">اسم الشاعر</label>
           <select id="poet"><option value="">اختر</option></select>
 
@@ -85,7 +104,36 @@
 
           <button type="submit">بحث</button>
         </form>
-      </aside>
+      </section>
+
+      <script>
+        const sideFilter = document.getElementById("side-filter");
+        const filterToggleButton = document.querySelector(".filter-toggle-btn");
+
+        function open_close_filter(){
+            sideFilter.classList.toggle("active");
+            if (sideFilter.classList.contains("active")) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleFilterSubmit(event) {
+            event.preventDefault(); 
+            const poet = document.getElementById("poet").value;
+            sideFilter.classList.remove("active");
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('click', function(event) {
+            if (sideFilter.classList.contains("active")) {
+                if (!sideFilter.contains(event.target) && !filterToggleButton.contains(event.target)) {
+                    open_close_filter(); 
+                }
+            }
+        });
+
+      </script>
 
       <div id="map"></div>
     </section>
@@ -98,16 +146,15 @@
         </div>
     </section>
 
-<section class="try-chatbot-section form-container" id="ai-analyzer">
-  <h2 class="chatbot-heading">استخرج الغرض الشعري</h2>
-  <p class="chatbot-subtitle">كل بيت شعر وراه غرض... اكتشفه بثواني مع مساعدنا الذكي</p>
+    <section class="try-chatbot-section form-container" id="ai-analyzer">
+      <h2 class="chatbot-heading">استخرج الغرض الشعري</h2>
+      <p class="chatbot-subtitle">كل بيت شعر وراه غرض... اكتشفه بثواني مع مساعدنا الذكي</p>
 
-  <div class="chatbot-input-box">
-    <input type="text" placeholder="اكتب بيت الشعر هنا..." />
-    <button>اكتشف الغرض الشعري</button>
-  </div>
-</section>
-
+      <div class="chatbot-input-box">
+        <input type="text" placeholder="اكتب بيت الشعر هنا..." />
+        <button>اكتشف الغرض الشعري</button>
+      </div>
+    </section>
 
     <section class="share-form-container" id="share-section">
       <h2 class="share-form-header">شاركنا</h2>
@@ -243,18 +290,18 @@
 
     <script src="../JS/contactForm.js"></script>
 
-   <!-- نافذة عرض المعلومات -->
+    <!-- نافذة عرض المعلومات -->
     <section id="infoModal" class="modal" style="display: none;">
       <div class="modal-content-custom">
 
         <!-- صورة المكان -->
-      <div class="modal-image">
-        <button id="prevImage" class="slider-arrow left-arrow"></button>
-        <div class="image-wrapper">
-          <img id="modalPlaceImage"/>
+        <div class="modal-image">
+          <button id="prevImage" class="slider-arrow left-arrow"></button>
+          <div class="image-wrapper">
+            <img id="modalPlaceImage"/>
+          </div>
+          <button id="nextImage" class="slider-arrow right-arrow"></button>
         </div>
-      <button id="nextImage" class="slider-arrow right-arrow"></button>
-      </div>
         <!-- المحتوى النصي -->
         <div style="flex: 1;">
           <!-- زر الإغلاق -->
@@ -289,83 +336,81 @@
     </section>
 
     <footer class="main-footer">
-        <div class="footer-content">
-
-            <div class="footer-section overview">
-                <h3>نظرة عامة</h3>
-                <ul>
-                    <li><a href="#">عن الخريطة الشعرية</a></li>
-                    <li><a href="#">الشروط والأحكام والخصوصية</a></li>
-                    <li><a href="#">سياسة الاستخدام وإخلاء المسؤولية</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section contact-support">
-                <h3>الإتصال والدعم</h3>
-                <ul>
-                    <li><a href="#">إتصل بنا</a></li>
-                    <li><a href="#" id="openFaqModal">الأسئلة الشائعة</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>تابعنا على</h3>
-                <div class="social-icons">
-                    <ul class="wrapper">
-                        <li class="icon facebook">
-                            <a href="#" aria-label="Facebook">
-                                <span class="tooltip">فيسبوك</span>
-                                <svg viewBox="0 0 320 512" height="1.2em" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="icon twitter">
-                            <a href="#" aria-label="Twitter">
-                                <span class="tooltip">تويتر</span>
-                                <svg height="1.8em" fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="twitter-svg"> <path d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"></path>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="icon instagram">
-                            <a href="#" aria-label="Instagram">
-                                <span class="tooltip">انستغرام</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" class="instagram-svg" viewBox="0 0 16 16"> <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="icon linkedin">
-                            <a href="#" aria-label="LinkedIn">
-                                <span class="tooltip">لينكدإن</span>
-                                <i class="fab fa-linkedin-in" style="font-size: 1.2em;"></i>
-                            </a>
-                        </li>
-                        </ul>
-                </div>
-
-                <h3>تطبيق الجوال</h3>
-                <div class="app-stores">
-                    <ul class="wrapper">
-                        <li class="icon apple-app-store">
-                            <a href="#" aria-label="Download on the App Store">
-                                <i class="bi bi-apple"></i>
-                            </a>
-                        </li>
-                        <li class="icon google-play-store">
-                            <a href="#" aria-label="Get it on Google Play">
-                                <i class="bi bi-google-play"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
+      <div class="footer-content">
+        <div class="footer-section overview">
+          <h3>نظرة عامة</h3>
+          <ul>
+            <li><a href="#">عن الخريطة الشعرية</a></li>
+            <li><a href="#">الشروط والأحكام والخصوصية</a></li>
+            <li><a href="#">سياسة الاستخدام وإخلاء المسؤولية</a></li>
+          </ul>
         </div>
+
+        <div class="footer-section contact-support">
+          <h3>الإتصال والدعم</h3>
+          <ul>
+            <li><a href="#">إتصل بنا</a></li>
+            <li><a href="#" id="openFaqModal">الأسئلة الشائعة</a></li>
+          </ul>
         </div>
-        <div class="footer-bottom">
-            <p>جميع الحقوق محفوظة لمركز البيانات التنموية 2025 ©</p>
-            <img src="../pictures/footer-logo.png" alt="Development Data Center">
+
+        <div class="footer-section">
+          <h3>تابعنا على</h3>
+          <div class="social-icons">
+            <ul class="wrapper">
+              <li class="icon facebook">
+                  <a href="#" aria-label="Facebook">
+                      <span class="tooltip">فيسبوك</span>
+                      <svg viewBox="0 0 320 512" height="1.2em" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
+                      </svg>
+                  </a>
+              </li>
+              <li class="icon twitter">
+                  <a href="#" aria-label="Twitter">
+                      <span class="tooltip">تويتر</span>
+                      <svg height="1.8em" fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="twitter-svg"> <path d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"></path>
+                      </svg>
+                  </a>
+              </li>
+              <li class="icon instagram">
+                  <a href="#" aria-label="Instagram">
+                      <span class="tooltip">انستغرام</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" class="instagram-svg" viewBox="0 0 16 16"> <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
+                      </svg>
+                  </a>
+              </li>
+              <li class="icon linkedin">
+                  <a href="#" aria-label="LinkedIn">
+                      <span class="tooltip">لينكدإن</span>
+                      <i class="fab fa-linkedin-in" style="font-size: 1.2em;"></i>
+                  </a>
+              </li>
+            </ul>
+          </div>
+
+          <h3>تطبيق الجوال</h3>
+          <div class="app-stores">
+            <ul class="wrapper">
+              <li class="icon apple-app-store">
+                <a href="#" aria-label="Download on the App Store">
+                  <i class="bi bi-apple"></i>
+                </a>
+              </li>
+              <li class="icon google-play-store">
+                <a href="#" aria-label="Get it on Google Play">
+                  <i class="bi bi-google-play"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
+
+      </div>
+      <div class="footer-bottom">
+        <p>جميع الحقوق محفوظة لمركز البيانات التنموية 2025 ©</p>
+        <img src="../pictures/footer-logo.png" alt="Development Data Center">
+      </div>
     </footer>
 
     <section id="faqModal" class="faq-popup"> 
@@ -373,65 +418,65 @@
         <span class="close-button-faq">&times;</span>
         <h2 class="faq-modal-title">الأسئلة الشائعة</h2>
         <div class="faq-container-modal">
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>ما هو هدف هذا المشروع؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>يهدف هذا المشروع إلى توثيق وحفظ التراث الشعري العربي من خلال ربط القصائد والشعراء بأماكنهم الجغرافية، وتوفير منصة تفاعلية للبحث والاستكشاف.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>ما هو هدف هذا المشروع؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>يهدف هذا المشروع إلى توثيق وحفظ التراث الشعري العربي من خلال ربط القصائد والشعراء بأماكنهم الجغرافية، وتوفير منصة تفاعلية للبحث والاستكشاف.</p>
+            </div>
+          </div>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>كيف يمكنني البحث عن قصيدة أو شاعر؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>يمكنك البحث عن القصائد والشعراء باستخدام خريطة الشعر التفاعلية، أو من خلال مربعات البحث والتصفية المتاحة في الصفحة الرئيسية وصفحة الخرائط.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>كيف يمكنني البحث عن قصيدة أو شاعر؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>يمكنك البحث عن القصائد والشعراء باستخدام خريطة الشعر التفاعلية، أو من خلال مربعات البحث والتصفية المتاحة في الصفحة الرئيسية وصفحة الخرائط.</p>
+            </div>
+          </div>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>هل يمكنني المساهمة في إضافة محتوى؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>نعم، نرحب بمساهمات المستخدمين. يمكنك استخدام نموذج "شارك قصيدة" المتوفر على الموقع لإضافة قصائد أو معلومات عن شعراء جدد، بعد مراجعتها من قبل فريقنا.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>هل يمكنني المساهمة في إضافة محتوى؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>نعم، نرحب بمساهمات المستخدمين. يمكنك استخدام نموذج "شارك قصيدة" المتوفر على الموقع لإضافة قصائد أو معلومات عن شعراء جدد، بعد مراجعتها من قبل فريقنا.</p>
+            </div>
+          </div>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>ما هي أنواع القصائد المتوفرة؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>الموقع يضم مجموعة واسعة من القصائد من عصور شعرية مختلفة، بما في ذلك الشعر الجاهلي، الأموي، العباسي، الأندلسي، والشعر الحديث، بالإضافة إلى الأنواع الشعرية المتنوعة.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>ما هي أنواع القصائد المتوفرة؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>الموقع يضم مجموعة واسعة من القصائد من عصور شعرية مختلفة، بما في ذلك الشعر الجاهلي، الأموي، العباسي، الأندلسي، والشعر الحديث، بالإضافة إلى الأنواع الشعرية المتنوعة.</p>
+            </div>
+          </div>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>هل الموقع متاح على الأجهزة المحمولة؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>نعم، الموقع مصمم ليكون متجاوباً ويعمل بشكل جيد على جميع الأجهزة، بما في ذلك الهواتف الذكية والأجهزة اللوحية، لتجربة استخدام مثلى.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>هل الموقع متاح على الأجهزة المحمولة؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>نعم، الموقع مصمم ليكون متجاوباً ويعمل بشكل جيد على جميع الأجهزة، بما في ذلك الهواتف الذكية والأجهزة اللوحية، لتجربة استخدام مثلى.</p>
+            </div>
+          </div>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>كيف يتم تحديد مواقع الشعراء والقصائد على الخريطة؟</h3>
-                    <span class="faq-arrow"></span>
-                </div>
-                <div class="faq-answer">
-                    <p>تعتمد المواقع على المعلومات التاريخية والجغرافية المتاحة عن مكان ولادة الشاعر، أو مكان إقامته، أو الأماكن التي ارتبطت بأحداث القصيدة أو مسيرته الشعرية.</p>
-                </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>كيف يتم تحديد مواقع الشعراء والقصائد على الخريطة؟</h3>
+              <span class="faq-arrow"></span>
             </div>
+            <div class="faq-answer">
+              <p>تعتمد المواقع على المعلومات التاريخية والجغرافية المتاحة عن مكان ولادة الشاعر، أو مكان إقامته، أو الأماكن التي ارتبطت بأحداث القصيدة أو مسيرته الشعرية.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); 
             const shareSection = document.getElementById('share-section');
             if (shareSection) {
-                shareSection.scrollIntoView({ behavior: 'smooth' });
+                shareSection.scrollIntoView({ behavior: 'smooth' , block: 'nearest'});
             }
             dropdownContent.classList.remove('show');
             dropdownArrow.classList.remove('rotate');
@@ -64,15 +64,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // scroll to map section
-    if (scrollToMap && dropdownContent && dropdownArrow) {
+    if (scrollToMap) {
         scrollToMap.addEventListener('click', function(event) {
             event.preventDefault(); 
             const mapSection = document.getElementById('map-section');
             if (mapSection) {
-                mapSection.scrollIntoView({ behavior: 'smooth' });
+                mapSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
-            dropdownContent.classList.remove('show');
-            dropdownArrow.classList.remove('rotate');
         });
     }
 
@@ -159,55 +157,55 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const header = document.querySelector('.header-section');
-  const mapContainer = document.getElementById('map');
-  const shareSection = document.getElementById('share-section');
-  const aiAnalyzer = document.getElementById('ai-analyzer');
-  const footer = document.querySelector('.main-footer');
-  const searchBtn = document.querySelector('.search-btn');
-  const filterSidebar = document.querySelector('.side-filter');
-  
+const mapContainer = document.getElementById('map');
+const shareSection = document.getElementById('share-section');
+const aiAnalyzer = document.getElementById('ai-analyzer');
+const footer = document.querySelector('.main-footer');
+const searchBtn = document.querySelector('.search-btn');
+const filterSidebar = document.querySelector('.side-filter');
 
-  // Smooth scroll to map
-  if (searchBtn && mapContainer) {
-    searchBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: mapContainer.offsetTop, behavior: 'smooth' });
-    });
-  }
 
-  // Utility function to toggle 'show' class based on element visibility
-  function toggleShowOnScroll(element, threshold = 150) {
-    const rect = element.getBoundingClientRect();
-    if (rect.top < window.innerHeight - threshold) {
-      element.classList.add('show');
-      return true;
-    } else {
-      element.classList.remove('show');
-      return false;
-    }
-  }
-
-  function handleScroll() {
-    const scrollY = window.scrollY;
-
-    // Hide header
-    header.classList.toggle('fade-out', scrollY > 500);
-    // أظهر الفلتر فقط بعد التمرير لمسافة معينة
-if (window.scrollY > 100) {
-  filterSidebar.classList.add('show');
-} else {
-  filterSidebar.classList.remove('show');
+// Smooth scroll to map
+if (searchBtn && mapContainer) {
+searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: mapContainer.offsetTop, behavior: 'smooth' });
+});
 }
 
-    // Show animations
-    toggleShowOnScroll(mapContainer);
-    toggleShowOnScroll(aiAnalyzer);
-    const isShareVisible = toggleShowOnScroll(shareSection);
-    toggleShowOnScroll(footer);
+// Utility function to toggle 'show' class based on element visibility
+function toggleShowOnScroll(element, threshold = 150) {
+const rect = element.getBoundingClientRect();
+if (rect.top < window.innerHeight - threshold) {
+    element.classList.add('show');
+    return true;
+} else {
+    element.classList.remove('show');
+    return false;
+}
+}
 
-    // Hide filter if share section is visible
-    filterSidebar.classList.toggle('hidden', isShareVisible || toggleShowOnScroll(aiAnalyzer));
-  }
+function handleScroll() {
+const scrollY = window.scrollY;
 
-  window.addEventListener('load', handleScroll);
-  window.addEventListener('scroll', handleScroll);
+// Hide header
+header.classList.toggle('fade-out', scrollY > 500);
+// show filter
+if (window.scrollY > 100) {
+filterSidebar.classList.add('show');
+} else {
+filterSidebar.classList.remove('show');
+}
+
+// Show animations
+toggleShowOnScroll(mapContainer);
+toggleShowOnScroll(aiAnalyzer);
+const isShareVisible = toggleShowOnScroll(shareSection);
+toggleShowOnScroll(footer);
+
+// Hide filter if share section is visible
+filterSidebar.classList.toggle('hidden', isShareVisible || toggleShowOnScroll(aiAnalyzer));
+}
+
+window.addEventListener('load', handleScroll);
+window.addEventListener('scroll', handleScroll);
