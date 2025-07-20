@@ -179,7 +179,12 @@ async function plotAllPins(filteredPlaceIds = []) {
   .attr("fill", filteredPlaceIds.length > 0 ? "orange" : "crimson")
   .attr("stroke", "#fff")
   .attr("stroke-width", 1.5)
-  .attr("transform", d => `translate(${projection([d.lon, d.lat])})`)
+  .attr("transform", d => {
+    const jitterAmount = 0.5;
+    const jitteredLon = d.lon + (Math.random() - 0.5) * jitterAmount;
+    const jitteredLat = d.lat + (Math.random() - 0.5) * jitterAmount;
+    return `translate(${projection([jitteredLon, jitteredLat])})`;
+  })
 
   .on("mouseover", function(event, d) {
     locationTooltip
@@ -230,7 +235,7 @@ async function plotAllPins(filteredPlaceIds = []) {
       const images = imagesData?.map(img => img.رابط_الصورة) || [];
 
       if (!data || data.length === 0) {
-        openModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
+        showInfoModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
         return;
       }
 

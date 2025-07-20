@@ -209,3 +209,36 @@ filterSidebar.classList.toggle('hidden', isShareVisible || toggleShowOnScroll(ai
 
 window.addEventListener('load', handleScroll);
 window.addEventListener('scroll', handleScroll);
+
+// menu btn
+const navLinks = document.getElementById("nav-links");
+function open_close_menu(){
+    navLinks.classList.toggle("active")
+}
+
+// filter btn
+const sideFilter = document.getElementById("side-filter");
+const filterToggleButton = document.querySelector(".filter-toggle-btn");
+
+function open_close_filter(){
+    sideFilter.classList.toggle("active");
+    if (sideFilter.classList.contains("active")) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+function handleFilterSubmit(event) {
+    event.preventDefault(); 
+    const poet = document.getElementById("poet").value;
+    sideFilter.classList.remove("active");
+    document.body.style.overflow = '';
+}
+document.addEventListener('click', function(event) {
+    if (sideFilter.classList.contains("active")) {
+        if (!sideFilter.contains(event.target) && !filterToggleButton.contains(event.target)) {
+            open_close_filter(); 
+        }
+    }
+});
