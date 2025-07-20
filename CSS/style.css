@@ -1601,7 +1601,6 @@ img.logo {
   margin: 0;
 }
 
-
 /* style for chatbot section*/
 .try-chatbot-section {
   padding: 80px 40px;
@@ -1625,15 +1624,51 @@ img.logo {
 }
 
 .chatbot-input-box {
-  background: #e7ded8;
+  background: transparent;
   border-radius: 20px;
   display: flex;
-  border: 2px solid #d8c5c5;
+  border: none;
   width: 750px;
   height: 90px;
   padding: 2px;
+  position: relative;
+  overflow: hidden;
 }
 
+.chatbot-input-box::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 149, 0, 0.9) 0%,
+    rgba(107, 54, 0, 0.9) 25%,
+    rgba(137, 98, 0, 0.9) 50%,
+    rgba(107, 54, 0, 0.9) 75%,
+    rgba(255, 149, 0, 0.9) 100%
+  );
+  animation: rotateBackground 8s linear infinite;
+  z-index: -1;
+  filter: blur(20px);
+  border-radius: 20px;
+}
+
+.chatbot-input-box::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: 18px;
+  background: #e7ded8;
+  mix-blend-mode: normal;
+  animation: backglitchChatbot 5s linear infinite;
+  z-index: -1;
+}
 
 .chatbot-input-box input {
   flex: 1;
@@ -1645,26 +1680,85 @@ img.logo {
   padding: 16px;
   outline: none;
   text-align: right;
+  z-index: 1;
+}
+
+/*keyframes for the animations*/
+@keyframes rotateBackground {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes backglitchChatbot {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+.chatbot-input-box input:focus + button + .chatbot-input-box::before {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  transition: all 1s ease-in-out;
 }
 
 .chatbot-input-box button {
-  background: #000;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 200px;
-  height: 60px;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: 18px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.svgIcon {
+  width: 12px;
+  transition-duration: 0.3s;
+}
+
+.svgIcon path {
+  fill: white;
 }
 
 .chatbot-input-box button:hover {
-  background-color: #333;
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(0, 0, 0);
+  align-items: center;
 }
+
+.chatbot-input-box button:hover .svgIcon {
+  width: 20px;
+  transition-duration: 0.3s;
+  transform: translateY(-200%);
+}
+
+.chatbot-input-box button::before {
+  position: absolute;
+  bottom: -20px;
+  content: "اكتشف الغرض الشعري";
+  color: white;
+  font-size: 0px;
+}
+
+.chatbot-input-box button:hover::before {
+  font-size: 15px;
+  opacity: 1;
+  bottom: unset;
+  transition-duration: 0.3s;
+}
+
 
 /* new btn for media*/
 .menu-toggle-btn,
@@ -1934,11 +2028,7 @@ img.logo {
     padding: 14px;
   }
   .chatbot-input-box button {
-    width: 160px;
-    height: 55px;
-    margin-top: 12px;
-    margin-left: 15px;
-    font-size: 16px;
+    margin-top: 15px;
   }
   .footer-content {
     flex-direction: column;
@@ -2073,11 +2163,10 @@ img.logo {
     padding: 12px;
   }
   .chatbot-input-box button {
-    width: 140px;
-    height: 50px;
     margin-top: 10px;
-    margin-left: 10px;
-    font-size: 14px;
+  }
+  .chatbot-input-box button:hover::before {
+    font-size: 13px;
   }
   .footer-section {
     max-width: 300px;
@@ -2191,11 +2280,8 @@ img.logo {
     padding: 10px;
   }
   .chatbot-input-box button {
-    width: 120px;
-    height: 45px;
-    margin-top: 8px;
-    margin-left: 8px;
-    font-size: 13px;
+    margin-top: 5px;
+    margin-left: 5px;
   }
   .footer-section {
     max-width: 250px;
