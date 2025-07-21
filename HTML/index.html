@@ -258,11 +258,11 @@
 
     <script src="../JS/contactForm.js"></script>
 
-    <!-- نافذة عرض المعلومات -->
+    <!-- information modal -->
     <section id="infoModal" class="modal" style="display: none;">
       <div class="modal-content-custom">
 
-        <!-- صورة المكان -->
+        <!-- place img -->
         <div class="modal-image">
           <button id="prevImage" class="slider-arrow left-arrow"></button>
           <div class="image-wrapper">
@@ -270,29 +270,29 @@
           </div>
           <button id="nextImage" class="slider-arrow right-arrow"></button>
         </div>
-        <!-- المحتوى النصي -->
+        <!-- content -->
         <div style="flex: 1;">
-          <!-- زر الإغلاق -->
+          <!-- close btn -->
           <span class="close-button" onclick="closeModal()">&times;</span>
 
-          <!-- أزرار التبويبات -->
+          <!-- tabs btns -->
           <div class="tab-buttons-modern">
             <button id="poemBtn" class="tab-button-modern active">الشعر</button>
             <button id="poetBtn" class="tab-button-modern">الشاعر</button>
           </div>
 
-          <!-- تبويب الشعر -->
+          <!-- poem tap -->
           <div class="tab-content" id="poemTab">
-            <!-- يتم تعبئة المحتوى من JS -->
+            <!-- content from JS -->
           </div>
 
-          <!-- تبويب الشاعر -->
+          <!-- poet tap-->
           <div class="tab-content" id="poetTab" style="display: none;">
             <div class="poet-info">
-              <!-- صورة الشاعر -->
+              <!-- poet img -->
               <img id="poetProfileImage" src="" alt="صورة الشاعر" class="poet-img" />
               
-              <!-- معلومات الشاعر -->
+              <!-- poet information -->
               <p><strong>اسم الشاعر:</strong> <span id="poetName"></span></p>
               <p><strong>تاريخ الولادة:</strong> <span id="poetBirth"></span></p>
               <p><strong>تاريخ الوفاة:</strong> <span id="poetDeath"></span></p>

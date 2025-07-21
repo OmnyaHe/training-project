@@ -1,6 +1,6 @@
 const supabase = window.supabase.createClient(
-    'https://uuiyhcacxtbhffpwljix.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1aXloY2FjeHRiaGZmcHdsaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExOTYyNjYsImV4cCI6MjA2Njc3MjI2Nn0.N1iXFjDfeXTLUsY51puvnHC-M-T2erCaQ1OTkXnT6uY'
+  'https://uuiyhcacxtbhffpwljix.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1aXloY2FjeHRiaGZmcHdsaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExOTYyNjYsImV4cCI6MjA2Njc3MjI2Nn0.N1iXFjDfeXTLUsY51puvnHC-M-T2erCaQ1OTkXnT6uY'
 );
 
 
@@ -41,80 +41,80 @@ async function fetchFilterOptions() {
 
 // Get colors for Saudi regions
 function getSaudiColors() {
-    return {
-    "منطقة الرياض": "rgba(110, 75, 58, 0.5)",  
-    "منطقة مكة المكرمة": "rgba(203, 180, 156, 0.5)", 
-    "منطقة المدينة المنورة": "rgba(98, 29, 82, 0.5)", 
-    "منطقة الشرقية": "rgba(12, 149, 96, 0.5)",    
-    "منطقة عسير": "rgba(77, 46, 32, 0.5)",      
-    "منطقة تبوك": "rgba(41, 50, 66, 0.5)",        
-    "منطقة الجوف": "rgba(168, 145, 120, 0.5)",   
-    "منطقة الحدود الشمالية": "rgba(110, 75, 58, 0.5)",
-    "منطقة نجران": "rgba(98, 29, 82, 0.5)",       
-    "منطقة جازان": "rgba(12, 149, 96, 0.5)",      
-    "منطقة الباحة": "rgba(41, 50, 66, 0.5)",   
-    "منطقة حائل": "rgba(41, 50, 66, 0.5)",        
-    "منطقة القصيم": "rgba(168, 145, 120, 0.5)" 
-    };
+  return {
+  "منطقة الرياض": "rgba(110, 75, 58, 0.5)",  
+  "منطقة مكة المكرمة": "rgba(203, 180, 156, 0.5)", 
+  "منطقة المدينة المنورة": "rgba(98, 29, 82, 0.5)", 
+  "منطقة الشرقية": "rgba(12, 149, 96, 0.5)",    
+  "منطقة عسير": "rgba(77, 46, 32, 0.5)",      
+  "منطقة تبوك": "rgba(41, 50, 66, 0.5)",        
+  "منطقة الجوف": "rgba(168, 145, 120, 0.5)",   
+  "منطقة الحدود الشمالية": "rgba(110, 75, 58, 0.5)",
+  "منطقة نجران": "rgba(98, 29, 82, 0.5)",       
+  "منطقة جازان": "rgba(12, 149, 96, 0.5)",      
+  "منطقة الباحة": "rgba(41, 50, 66, 0.5)",   
+  "منطقة حائل": "rgba(41, 50, 66, 0.5)",        
+  "منطقة القصيم": "rgba(168, 145, 120, 0.5)" 
+  };
 }
 
 // Initialize the Saudi map using D3.js
 async function initSaudiMap() {
-    const mapContainer = document.getElementById("map");
-    // Ensure map-container has dimensions before getting clientWidth/Height
-    if (!mapContainer.clientWidth || !mapContainer.clientHeight) {
-        console.warn("Map container has no dimensions. Waiting for layout.");
-        // Use requestAnimationFrame to ensure layout is computed
-        requestAnimationFrame(initSaudiMap);
-        return;
-    }
+  const mapContainer = document.getElementById("map");
+  // Ensure map-container has dimensions before getting clientWidth/Height
+  if (!mapContainer.clientWidth || !mapContainer.clientHeight) {
+    console.warn("Map container has no dimensions. Waiting for layout.");
+    // Use requestAnimationFrame to ensure layout is computed
+    requestAnimationFrame(initSaudiMap);
+    return;
+  }
 
-    const width = mapContainer.clientWidth;
-    const height = mapContainer.clientHeight;
+  const width = mapContainer.clientWidth;
+  const height = mapContainer.clientHeight;
 
-    // Clear previous SVG content if re-initializing
-    d3.select("#map svg").remove();
+  // Clear previous SVG content if re-initializing
+  d3.select("#map svg").remove();
 
-    svg = d3.select("#map").append("svg")
-        .attr("width", "100%")
-        .attr("height", "100%");
+  svg = d3.select("#map").append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%");
 
-    projection = d3.geoMercator(); // Initialize projection
-    path = d3.geoPath().projection(projection); // Initialize path
+  projection = d3.geoMercator(); // Initialize projection
+  path = d3.geoPath().projection(projection); // Initialize path
 
-    tooltip = d3.select("body").append("div")
-        .attr("class", "map-tooltip")
-        .style("visibility", "hidden");
+  tooltip = d3.select("body").append("div")
+    .attr("class", "map-tooltip")
+    .style("visibility", "hidden");
 
-    try {
-        const geojson = await d3.json("https://raw.githubusercontent.com/Lama-G/training/main/saudiMap.geojson");
+  try {
+    const geojson = await d3.json("https://raw.githubusercontent.com/Lama-G/training/main/saudiMap.geojson");
 
-        geojson.features.forEach(f => {
-            const c = f.geometry.coordinates;
-            if (f.geometry.type === "Polygon") {
-                c.forEach(r => r.reverse());
-            } else if (f.geometry.type === "MultiPolygon") {
-                c.forEach(p => p.forEach(r => r.reverse()));
-            }
-        });
+    geojson.features.forEach(f => {
+      const c = f.geometry.coordinates;
+      if (f.geometry.type === "Polygon") {
+        c.forEach(r => r.reverse());
+      } else if (f.geometry.type === "MultiPolygon") {
+        c.forEach(p => p.forEach(r => r.reverse()));
+      }
+    });
 
-        // Fit projection to the GeoJSON data based on map container size
-        projection.fitSize([width, height], geojson);
+    // Fit projection to the GeoJSON data based on map container size
+    projection.fitSize([width, height], geojson);
 
-        // Draw regions
-       svg.selectAll(".region")
-  .data(geojson.features.filter(f => f.geometry.type !== "Point"))
-  .enter().append("path")
-  .attr("class", "region")
-  .attr("d", path)
-  .attr("fill", d => getSaudiColors()[d.properties.name] || "#ccc")
-  .attr("stroke", "#000")
-  .attr("stroke-width", 1)
+    // Draw regions
+    svg.selectAll(".region")
+    .data(geojson.features.filter(f => f.geometry.type !== "Point"))
+    .enter().append("path")
+    .attr("class", "region")
+    .attr("d", path)
+    .attr("fill", d => getSaudiColors()[d.properties.name] || "#ccc")
+    .attr("stroke", "#000")
+    .attr("stroke-width", 1)
 
-  .attr("transform-origin", "center center")
-.style("transition", "all 0.2s ease")
-  .on("mouseover", (e, d) => {
-    d3.select(e.currentTarget)
+    .attr("transform-origin", "center center")
+    .style("transition", "all 0.2s ease")
+    .on("mouseover", (e, d) => {
+      d3.select(e.currentTarget)
         .transition()
         .duration(200)
         .attr("transform", "scale(1.05)")
@@ -122,30 +122,26 @@ async function initSaudiMap() {
         .attr("stroke-width", 2);
 
     tooltip.style("visibility", "visible")
-        .html(`<strong>${d.properties.name}</strong>`)
-        .style("left", (e.pageX + 15) + "px")
-        .style("top", (e.pageY - 20) + "px");
-})
-.on("mouseout", (e, d) => {
-    d3.select(e.currentTarget)
+      .html(`<strong>${d.properties.name}</strong>`)
+      .style("left", (e.pageX + 15) + "px")
+      .style("top", (e.pageY - 20) + "px");
+    })
+    .on("mouseout", (e, d) => {
+      d3.select(e.currentTarget)
         .transition()
         .duration(200)
         .attr("transform", "scale(1)")
         .attr("stroke", "#000")
         .attr("stroke-width", 1);
 
-    tooltip.style("visibility", "hidden");
-});
+      tooltip.style("visibility", "hidden");
+    });
+    plotAllPins();
 
-
-
-
-        plotAllPins();
-
-    } catch (error) {
-        console.error("Error loading GeoJSON or initializing map:", error);
-        mapContainer.innerHTML = "<p>تعذر تحميل الخريطة. الرجاء المحاولة لاحقًا.</p>";
-    }
+  } catch (error) {
+    console.error("Error loading GeoJSON or initializing map:", error);
+    mapContainer.innerHTML = "<p>تعذر تحميل الخريطة. الرجاء المحاولة لاحقًا.</p>";
+  }
 }
 
 
@@ -215,92 +211,92 @@ async function plotAllPins(filteredPlaceIds = []) {
   })
 
   .on("click", async (event, d) => {
-      const { data, error } = await supabase
-        .from("القصيدة")
-        .select(`
-          النص_الشعري,
-          نوع_الشعر,
-          الغرض_الشعري,
-          العصر_الشعري,
-          الشاعر:معرف_الشاعر (اسم_الشاعر, تاريخ_ولادة_الشاعر, تاريخ_وفاة_الشاعر, صورة_الشاعر),
-          المصدر:معرف_المصدر (اسم_المصدر, اسم_المؤلف, تاريخ_النشر)
-        `)
-        .eq("معرف_المكان", d.معرف_المكان);
+    const { data, error } = await supabase
+      .from("القصيدة")
+      .select(`
+        النص_الشعري,
+        نوع_الشعر,
+        الغرض_الشعري,
+        العصر_الشعري,
+        الشاعر:معرف_الشاعر (اسم_الشاعر, تاريخ_ولادة_الشاعر, تاريخ_وفاة_الشاعر, صورة_الشاعر),
+        المصدر:معرف_المصدر (اسم_المصدر, اسم_المؤلف, تاريخ_النشر)
+      `)
+      .eq("معرف_المكان", d.معرف_المكان);
 
-      const { data: imagesData } = await supabase
-        .from("صورة_المكان")
-        .select("رابط_الصورة")
-        .eq("معرف_المكان", d.معرف_المكان);
+    const { data: imagesData } = await supabase
+      .from("صورة_المكان")
+      .select("رابط_الصورة")
+      .eq("معرف_المكان", d.معرف_المكان);
 
-      const images = imagesData?.map(img => img.رابط_الصورة) || [];
+    const images = imagesData?.map(img => img.رابط_الصورة) || [];
 
-      if (!data || data.length === 0) {
-        showInfoModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
-        return;
+    if (!data || data.length === 0) {
+      showInfoModal("تفاصيل الموقع", "<p>لا توجد بيانات.</p>");
+      return;
+    }
+
+    const poem = data[0];
+
+    const contentHTML = `
+      <div class="modal-details">
+        <h3>${d.اسم_المكان}</h3>
+        <p><strong>الإمارة:</strong> ${d.الامارة}</p>
+        <p><strong>المدينة:</strong> ${d.المدينة}</p>
+        <hr />
+        poemTab.innerHTML = createExpandablePoem(poem.النص_الشعري);
+        <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
+        <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
+        <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
+        <p><strong>الشاعر:</strong> ${poem.الشاعر?.اسم_الشاعر}</p>
+        <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
+        <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
+        <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
+      </div>
+    `;
+
+    showInfoModal({
+      اسم_المكان: d.اسم_المكان,
+      النص_الشعري: poem.النص_الشعري,
+      نوع_الشعر: poem.نوع_الشعر,
+      الغرض_الشعري: poem.الغرض_الشعري,
+      العصر_الشعري: poem.العصر_الشعري,
+      المصدر: poem.المصدر?.اسم_المصدر,
+      اسم_الشاعر: poem.الشاعر?.اسم_الشاعر,
+      تاريخ_ولادة_الشاعر: poem.الشاعر?.تاريخ_ولادة_الشاعر,
+      تاريخ_وفاة_الشاعر: poem.الشاعر?.تاريخ_وفاة_الشاعر,
+      عدد_القصائد: poem.الشاعر?.عدد_القصائد,
+      صورة_المكان: images[0] || '',
+      جميع_الصور: images,
+      صورة_الشاعر: poem.الشاعر?.صورة_الشاعر,
+      googleMapUrl: d.قوقل_ماب  
+    });
+
+    setTimeout(() => {
+      let currentImageIndex = 0;
+      const modalPlaceImage = document.getElementById('modalPlaceImage');
+      const prevBtn = document.getElementById('prevImage');
+      const nextBtn = document.getElementById('nextImage');
+
+      function showImage(index) {
+        if (images.length > 0 && modalPlaceImage) {
+          modalPlaceImage.src = images[index];
+        }
       }
 
-      const poem = data[0];
+      if (prevBtn && nextBtn) {
+        prevBtn.onclick = () => {
+          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+          showImage(currentImageIndex);
+        };
 
-      const contentHTML = `
-        <div class="modal-details">
-          <h3>${d.اسم_المكان}</h3>
-          <p><strong>الإمارة:</strong> ${d.الامارة}</p>
-          <p><strong>المدينة:</strong> ${d.المدينة}</p>
-          <hr />
-          poemTab.innerHTML = createExpandablePoem(poem.النص_الشعري);
-          <p><strong>نوع الشعر:</strong> ${poem.نوع_الشعر}</p>
-          <p><strong>الغرض:</strong> ${poem.الغرض_الشعري}</p>
-          <p><strong>العصر:</strong> ${poem.العصر_الشعري}</p>
-          <p><strong>الشاعر:</strong> ${poem.الشاعر?.اسم_الشاعر}</p>
-          <p><strong>تاريخ الولادة:</strong> ${poem.الشاعر?.تاريخ_ولادة_الشاعر}</p>
-          <p><strong>الوفاة:</strong> ${poem.الشاعر?.تاريخ_وفاة_الشاعر}</p>
-          <p><strong>المصدر:</strong> ${poem.المصدر?.اسم_المصدر}</p>
-        </div>
-      `;
+        nextBtn.onclick = () => {
+          currentImageIndex = (currentImageIndex + 1) % images.length;
+          showImage(currentImageIndex);
+        };
+      }
+    }, 100);
 
-      showInfoModal({
-  اسم_المكان: d.اسم_المكان,
-  النص_الشعري: poem.النص_الشعري,
-  نوع_الشعر: poem.نوع_الشعر,
-  الغرض_الشعري: poem.الغرض_الشعري,
-  العصر_الشعري: poem.العصر_الشعري,
-  المصدر: poem.المصدر?.اسم_المصدر,
-  اسم_الشاعر: poem.الشاعر?.اسم_الشاعر,
-  تاريخ_ولادة_الشاعر: poem.الشاعر?.تاريخ_ولادة_الشاعر,
-  تاريخ_وفاة_الشاعر: poem.الشاعر?.تاريخ_وفاة_الشاعر,
-  عدد_القصائد: poem.الشاعر?.عدد_القصائد,
-  صورة_المكان: images[0] || '',
-  جميع_الصور: images,
-  صورة_الشاعر: poem.الشاعر?.صورة_الشاعر,
-  googleMapUrl: d.قوقل_ماب  
-});
-
-      setTimeout(() => {
-  let currentImageIndex = 0;
-  const modalPlaceImage = document.getElementById('modalPlaceImage');
-  const prevBtn = document.getElementById('prevImage');
-  const nextBtn = document.getElementById('nextImage');
-
-  function showImage(index) {
-    if (images.length > 0 && modalPlaceImage) {
-      modalPlaceImage.src = images[index];
-    }
-  }
-
-  if (prevBtn && nextBtn) {
-    prevBtn.onclick = () => {
-      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-      showImage(currentImageIndex);
-    };
-
-    nextBtn.onclick = () => {
-      currentImageIndex = (currentImageIndex + 1) % images.length;
-      showImage(currentImageIndex);
-    };
-  }
-}, 100);
-
-    });
+  });
 }
 
 // Event listener for filter form submission
@@ -416,34 +412,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Handle window resize to make map responsive
 window.addEventListener('resize', () => {
-    // Debounce resize to prevent excessive re-renders
-    if (this.resizeTimer) clearTimeout(this.resizeTimer);
-    this.resizeTimer = setTimeout(() => {
-        if (svg && projection) {
-            const mapContainer = document.getElementById("map");
-            const width = mapContainer.clientWidth;
-            const height = mapContainer.clientHeight;
+  // Debounce resize to prevent excessive re-renders
+  if (this.resizeTimer) clearTimeout(this.resizeTimer);
+  this.resizeTimer = setTimeout(() => {
+    if (svg && projection) {
+      const mapContainer = document.getElementById("map");
+      const width = mapContainer.clientWidth;
+      const height = mapContainer.clientHeight;
 
-            // Update SVG dimensions (already 100%, but good to re-confirm)
-            svg.attr("width", "100%").attr("height", "100%");
+      // Update SVG dimensions (already 100%, but good to re-confirm)
+      svg.attr("width", "100%").attr("height", "100%");
 
-            // Re-fit projection to new container size
-            d3.json("https://raw.githubusercontent.com/Lama-G/training/main/saudiMap.geojson").then(geojson => {
-                geojson.features.forEach(f => { // Re-reverse coordinates if needed by the specific GeoJSON
-                    const c = f.geometry.coordinates;
-                    if (f.geometry.type === "Polygon") c.forEach(r => r.reverse());
-                    else if (f.geometry.type === "MultiPolygon") c.forEach(p => p.forEach(r => r.reverse()));
-                });
-                projection.fitSize([width, height], geojson);
-                path.projection(projection); // Update path with new projection
+      // Re-fit projection to new container size
+      d3.json("https://raw.githubusercontent.com/Lama-G/training/main/saudiMap.geojson").then(geojson => {
+        geojson.features.forEach(f => { // Re-reverse coordinates if needed by the specific GeoJSON
+          const c = f.geometry.coordinates;
+          if (f.geometry.type === "Polygon") c.forEach(r => r.reverse());
+          else if (f.geometry.type === "MultiPolygon") c.forEach(p => p.forEach(r => r.reverse()));
+        });
+        projection.fitSize([width, height], geojson);
+        path.projection(projection); // Update path with new projection
 
-                // Redraw map paths
-                svg.selectAll(".region").attr("d", path);
-                plotAllPins(); 
+        // Redraw map paths
+        svg.selectAll(".region").attr("d", path);
+        plotAllPins(); 
 
-            }).catch(error => console.error("Error reloading GeoJSON on resize:", error));
-        }
-    }, 250); // Adjust debounce time as needed
+      }).catch(error => console.error("Error reloading GeoJSON on resize:", error));
+    }
+  }, 250); // Adjust debounce time as needed
 });
 
 
@@ -499,99 +495,99 @@ function showInfoModal(data) {
   const poetProfileImage = document.getElementById('poetProfileImage');
 
 
-  // صورة المكان (يمين)
+  // defult image if no place image is provided
   document.querySelector('.modal-image').style.display = 'block';
   modalPlaceImage.src = data.صورة_المكان || '../pictures/missing-photo.png';
 
-  // صورة الشاعر (يسار)
+  // default image if no poet image is provided
   poetProfileImage.src = data.صورة_الشاعر || '../pictures/user-icon.png';
 
-  // تبويب الشعر
-poemTab.innerHTML = `
-  <div class="poem-info-modern">
-    <div class="info-row">
-      <span class="label">نص الشعر:</span>
-      <div class="value poem-text">
-       ${formatPoemWithToggle(data.النص_الشعري || 'غير متوفر')}
+  // poem tab
+  poemTab.innerHTML = `
+    <div class="poem-info-modern">
+      <div class="info-row">
+        <span class="label">نص الشعر:</span>
+        <div class="value poem-text">
+        ${formatPoemWithToggle(data.النص_الشعري || 'غير متوفر')}
+        </div>
+      </div>
+    
+      <div class="info-row">
+        <span class="label">المكان:</span>
+        <span class="value">
+        ${data.اسم_المكان || 'غير معروف'}
+        ${data.googleMapUrl ? `<img id="locationIcon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="موقع على الخريطة" class="inline-map-icon" />` : ''}
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">نوع الشعر:</span>
+        <span class="value">${data.نوع_الشعر || 'غير محدد'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">الغرض الشعري:</span>
+        <span class="value">${data.الغرض_الشعري || 'غير محدد'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">العصر الشعري:</span>
+        <span class="value">${data.العصر_الشعري || 'غير معروف'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">المصدر:</span>
+        <span class="value">${data.المصدر || 'غير معروف'}</span>
+      </div>
+
+    </div>
+  `;
+
+  // Show arrows only if there is more than one image
+  function updateArrowVisibility(images) {
+    const leftArrow = document.getElementById('prevImage');
+    const rightArrow = document.getElementById('nextImage');
+
+    if (!images || images.length <= 1) {
+      leftArrow.style.display = 'none';
+      rightArrow.style.display = 'none';
+    } else {
+      leftArrow.style.display = 'block';
+      rightArrow.style.display = 'block';
+    }
+  }
+
+
+  updateArrowVisibility(data.جميع_الصور);
+
+
+
+  // poet tab
+  poetTab.innerHTML = `
+    <div class="poet-info-modern">
+      <img id="poetProfileImage" src="${data.صورة_الشاعر || '../pictures/user-icon.png'}" alt="صورة الشاعر" class="poet-img" />
+      
+      <div class="info-row">
+        <span class="label">اسم الشاعر:</span>
+        <span class="value">${data.اسم_الشاعر || 'غير معروف'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">تاريخ الولادة:</span>
+        <span class="value">${data.تاريخ_ولادة_الشاعر || 'غير معروف'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">تاريخ الوفاة:</span>
+        <span class="value">${data.تاريخ_وفاة_الشاعر || 'غير معروف'}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">عدد الأشعار:</span>
+        <span class="value">${data.عدد_القصائد || 'غير معروف'}</span>
       </div>
     </div>
-  
-    <div class="info-row">
-      <span class="label">المكان:</span>
-      <span class="value">
-       ${data.اسم_المكان || 'غير معروف'}
-       ${data.googleMapUrl ? `<img id="locationIcon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="موقع على الخريطة" class="inline-map-icon" />` : ''}
-      </span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">نوع الشعر:</span>
-      <span class="value">${data.نوع_الشعر || 'غير محدد'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">الغرض الشعري:</span>
-      <span class="value">${data.الغرض_الشعري || 'غير محدد'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">العصر الشعري:</span>
-      <span class="value">${data.العصر_الشعري || 'غير معروف'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">المصدر:</span>
-      <span class="value">${data.المصدر || 'غير معروف'}</span>
-    </div>
-
-  </div>
-`;
-
-// Show arrows only if there is more than one image
-function updateArrowVisibility(images) {
-  const leftArrow = document.getElementById('prevImage');
-  const rightArrow = document.getElementById('nextImage');
-
-  if (!images || images.length <= 1) {
-    leftArrow.style.display = 'none';
-    rightArrow.style.display = 'none';
-  } else {
-    leftArrow.style.display = 'block';
-    rightArrow.style.display = 'block';
-  }
-}
-
-
-updateArrowVisibility(data.جميع_الصور);
-
-
-
-  // تبويب الشاعر
-poetTab.innerHTML = `
-  <div class="poet-info-modern">
-    <img id="poetProfileImage" src="${data.صورة_الشاعر || '../pictures/user-icon.png'}" alt="صورة الشاعر" class="poet-img" />
-    
-    <div class="info-row">
-      <span class="label">اسم الشاعر:</span>
-      <span class="value">${data.اسم_الشاعر || 'غير معروف'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">تاريخ الولادة:</span>
-      <span class="value">${data.تاريخ_ولادة_الشاعر || 'غير معروف'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">تاريخ الوفاة:</span>
-      <span class="value">${data.تاريخ_وفاة_الشاعر || 'غير معروف'}</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">عدد الأشعار:</span>
-      <span class="value">${data.عدد_القصائد || 'غير معروف'}</span>
-    </div>
-  </div>
-`;
+  `;
 
   modal.style.display = 'flex';
 
@@ -604,27 +600,23 @@ poetTab.innerHTML = `
       window.open(data.googleMapUrl, '_blank');
     };
   }
-}, 0);
+  }, 0);
 
-// Enable the "اقرأ المزيد" button to reveal the rest of the poem when clicked
-setTimeout(() => {
-  const btn = document.getElementById('expandPoemBtn');
-  const full = document.getElementById('fullPoem');
-  if (btn && full) {
-    btn.onclick = () => {
-      full.style.display = 'block';
-      btn.style.display = 'none';
-    };
-  }
-}, 0);
-
-
+  // Enable the "اقرأ المزيد" button to reveal the rest of the poem when clicked
+  setTimeout(() => {
+    const btn = document.getElementById('expandPoemBtn');
+    const full = document.getElementById('fullPoem');
+    if (btn && full) {
+      btn.onclick = () => {
+        full.style.display = 'block';
+        btn.style.display = 'none';
+      };
+    }
+  }, 0);
 }
 
-
-
 function switchTab(tabId, event) {
-  event.stopPropagation(); // ← هذا هو المهم
+  event.stopPropagation();
 
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.style.display = 'none';

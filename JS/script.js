@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); 
             const shareSection = document.getElementById('share-section');
             if (shareSection) {
-                shareSection.scrollIntoView({ behavior: 'smooth' , block: 'nearest'});
+                shareSection.scrollIntoView({ behavior: 'smooth' , block: 'center'});
             }
             dropdownContent.classList.remove('show');
             dropdownArrow.classList.remove('rotate');
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); 
             const mapSection = document.getElementById('map-section');
             if (mapSection) {
-                mapSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
     }
