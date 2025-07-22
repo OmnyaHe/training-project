@@ -22,12 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
         showFields(); 
     }
 
-
+    // Contact dropdown functionality
     const dropdownBtn = document.getElementById('contactDropdownBtn');
     const dropdownContent = document.getElementById('contactDropdownContent'); 
     const dropdownArrow = document.querySelector('.dropdown-arrow');
     const scrollToShareLink = document.getElementById('scroll-to-share');
-    const scrollToMap = document.getElementById('scroll-to-map');
     const openContactModalBtn = document.getElementById('open-contact-modal');
     const contactModal = document.getElementById('contactModal');
     const closeButton = contactModal ? contactModal.querySelector('.close-button') : null;
@@ -56,21 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); 
             const shareSection = document.getElementById('share-section');
             if (shareSection) {
-                shareSection.scrollIntoView({ behavior: 'smooth' , block: 'nearest'});
+                shareSection.scrollIntoView({ behavior: 'smooth' , block: 'center'});
             }
             dropdownContent.classList.remove('show');
             dropdownArrow.classList.remove('rotate');
-        });
-    }
-
-    // scroll to map section
-    if (scrollToMap) {
-        scrollToMap.addEventListener('click', function(event) {
-            event.preventDefault(); 
-            const mapSection = document.getElementById('map-section');
-            if (mapSection) {
-                mapSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
         });
     }
 

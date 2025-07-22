@@ -1,10 +1,10 @@
-// بيانات مشروع Supabase
+// information about the Supabase
 const SUPABASE_URL = "https://uuiyhcacxtbhffpwljix.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1aXloY2FjeHRiaGZmcHdsaml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExOTYyNjYsImV4cCI6MjA2Njc3MjI2Nn0.N1iXFjDfeXTLUsY51puvnHC-M-T2erCaQ1OTkXnT6uY";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// نموذج تواصل معنا
+// contact us modal
 document.getElementById("contactForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -76,7 +76,7 @@ document.getElementById("contactForm").addEventListener("submit", async function
 
 });
 
-// ✅ نموذج شاركنا
+// share form modal
 document.getElementById("shareform").addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -135,8 +135,8 @@ document.getElementById("shareform").addEventListener("submit", async function (
     نوع_المشاركة: shareType
   };
 
-  // validation-  إضافة شعر
-  if (shareType === "add-poem") {
+  // validation-add poem
+    if (shareType === "add-poem") {
     const poetNameInput = document.getElementById("poetName");
     const poemTitleInput = document.getElementById("poemTitle");
     const poemLocationInput = document.getElementById("poemLocation");
@@ -184,8 +184,8 @@ document.getElementById("shareform").addEventListener("submit", async function (
       جزئية_الشعر: poemExcerpt
     };
   }
-
-  // validation-  تعديل الخطأ
+  
+  // validation-edit mistake
   else if (shareType === "edit-mistake") {
     const editTypeInput = document.getElementById("editType");
     const editTitleInput = document.getElementById("editTitle");
