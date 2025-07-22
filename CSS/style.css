@@ -2534,4 +2534,9 @@ img.logo {
     font-size: 0.8em;
   }
 }
-
+#output-box {
+  color: #2e6d44; /* أخضر غامق كمثال */
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+}

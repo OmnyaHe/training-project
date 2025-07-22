@@ -14,7 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="../JS/script.js" defer></script>
-    <script src="../GIS/GIS.js" defer></script>    
+    <script src="../GIS/GIS.js" defer></script> 
+    <script type="module" src="main.js"></script>
+   
 </head>
   <body>
     <section class="header-section" id="header">
@@ -113,8 +115,8 @@
       <p class="chatbot-subtitle">كل بيت شعر وراه غرض... اكتشفه بثواني مع مساعدنا الذكي</p>
 
       <div class="chatbot-input-box">
-        <input type="text" placeholder="اكتب بيت الشعر هنا..." />
-        <button>
+        <input type="text" id="poem-input"  placeholder="اكتب بيت الشعر هنا..." />
+        <button onclick="classifyText()">
           <svg class="svgIcon" viewBox="0 0 384 512">
             <path
               d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
@@ -122,6 +124,7 @@
           </svg>
         </button>
       </div>
+       <div id="output-box"></div>
     </section>
 
     <section class="share-form-container" id="share-section">
@@ -448,6 +451,5 @@
         </div>
       </div>
     </section>
-
   </body>
 </html>
