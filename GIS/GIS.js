@@ -36,9 +36,6 @@ async function fetchFilterOptions() {
   fillSelect('poemEra', poemData?.map(p => p.العصر_الشعري) || []);
 }
 
-
-
-
 // Get colors for Saudi regions
 function getSaudiColors() {
   return {
@@ -420,7 +417,6 @@ function resetFilters() {
   document.querySelectorAll(".filter-form select").forEach(select => select.value = "");
   document.getElementById("alertBox").classList.remove("show");
   plotAllPins();
-  document.body.style.overflow = 'hidden';
 }
 
 // Function to show all pins on the map when "عرض الكل" button is clicked
