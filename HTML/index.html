@@ -16,7 +16,6 @@
     <script src="../JS/script.js" defer></script>
     <script src="../GIS/GIS.js" defer></script> 
     <script type="module" src="main.js"></script>
-   
 </head>
   <body>
     <section class="header-section" id="header">
@@ -96,6 +95,7 @@
           <select id="poemEra"><option value="">اختر</option></select>
 
           <button type="submit">بحث</button>
+          <button type="button" id="clearFiltersBtn" style="display: none;">عرض الكل</button>
         </form>
       </section>
 
@@ -124,7 +124,7 @@
           </svg>
         </button>
       </div>
-       <div id="output-box"></div>
+      <div id="output-box"></div>
     </section>
 
     <section class="share-form-container" id="share-section">

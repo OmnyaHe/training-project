@@ -153,6 +153,13 @@ async function plotAllPins(filteredPlaceIds = []) {
 
   if (filteredPlaceIds.length > 0) {
     pinsToShow = places.filter(p => filteredPlaceIds.includes(p.معرف_المكان));
+    if (clearFiltersBtn) {
+      clearFiltersBtn.style.display = 'block';
+    }
+  }else {
+    if (clearFiltersBtn) {
+      clearFiltersBtn.style.display = 'none';
+    }
   }
 
   const locationTooltip = d3.select("body")
@@ -176,7 +183,7 @@ async function plotAllPins(filteredPlaceIds = []) {
   .attr("stroke", "#fff")
   .attr("stroke-width", 1.5)
   .attr("transform", d => {
-    const jitterAmount = 0.5;
+    const jitterAmount = 0.005;
     const jitteredLon = d.lon + (Math.random() - 0.5) * jitterAmount;
     const jitteredLat = d.lat + (Math.random() - 0.5) * jitterAmount;
     return `translate(${projection([jitteredLon, jitteredLat])})`;
@@ -308,6 +315,7 @@ document.querySelector('.filter-form').addEventListener('submit', async (e) => {
   const type = document.getElementById('poemType').value.trim();
   const purpose = document.getElementById('poemPurpose').value.trim();
   const era = document.getElementById('poemEra').value.trim();
+  const isAnyFilterApplied = poetName || region || type || purpose || era;
 
   let poetId = null;
 
@@ -321,6 +329,14 @@ if (poetName) {
 
   if (!poetError && poetResult) {
     poetId = poetResult.معرف_الشاعر;
+  } else {
+    const alertBox = document.getElementById("alertBox");
+    alertBox.classList.add("show");
+    plotAllPins([]);
+    if (clearFiltersBtn) {
+      clearFiltersBtn.style.display = 'none';
+    }
+    return;
   }
 }
 
@@ -339,6 +355,9 @@ const alertBox = document.getElementById("alertBox");
 if (error || !placesData) {
   alertBox.classList.add("show");
   plotAllPins([]);  // Display no pins
+  if (clearFiltersBtn) {
+    clearFiltersBtn.style.display = 'none';
+  }
   return;
 }
 
@@ -372,10 +391,21 @@ filteredPlaces = filteredPlaces.filter(p => allowedPlacesIds.includes(p.معرف
 if (filteredPlaces.length === 0) {
   alertBox.classList.add("show");
   plotAllPins([]);  // No matching pins to show
+  if (clearFiltersBtn) {
+    clearFiltersBtn.style.display = 'none';
+  }
 } else {
   alertBox.classList.remove("show");
   const placeIds = filteredPlaces.map(p => p.معرف_المكان);
   plotAllPins(placeIds);  // Plot matching pins
+  // Show "عرض الكل" button if any filters are applied
+  if (clearFiltersBtn && isAnyFilterApplied) {
+    clearFiltersBtn.style.display = 'block';
+  } else {
+    if (clearFiltersBtn) {
+      clearFiltersBtn.style.display = 'none';
+    }
+  }
 }});
 
 
@@ -390,8 +420,19 @@ function resetFilters() {
   document.querySelectorAll(".filter-form select").forEach(select => select.value = "");
   document.getElementById("alertBox").classList.remove("show");
   plotAllPins();
-  filterModal.classList.add("show");
   document.body.style.overflow = 'hidden';
+}
+
+// Function to show all pins on the map when "عرض الكل" button is clicked
+let clearFiltersBtn;
+async function showAllPinsOnMap() {
+  resetFilters();
+  document.getElementById("alertBox").classList.remove("show");
+  await plotAllPins([]);
+  
+  if (clearFiltersBtn) {
+    clearFiltersBtn.style.display = 'none';
+  }
 }
 
 
@@ -406,8 +447,13 @@ if (mainSearchBtn) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchFilterOptions();
-    initSaudiMap();
+  fetchFilterOptions();
+  initSaudiMap();
+
+  clearFiltersBtn = document.getElementById('clearFiltersBtn');
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', showAllPinsOnMap);
+  }
 });
 
 // Handle window resize to make map responsive
@@ -637,11 +683,3 @@ document.getElementById('poemBtn').addEventListener('click', function (event) {
 document.getElementById('poetBtn').addEventListener('click', function (event) {
   switchTab('poetTab', event);
 });
-
-
-
-
-
-
-
-
